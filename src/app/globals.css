@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/*
+ * Funnel North design tokens, sourced from the Figma `--fn-*` variable set.
+ * Exposed through Tailwind v4 `@theme` so utilities like `bg-brand`,
+ * `text-ink`, `rounded-pill`, `font-display` are generated from them.
+ */
+@theme {
+  /* Color — brand */
+  --color-brand: #7b3df2;
+  --color-brand-deep: #6227d4;
+  --color-accent: #e7fe25;
+
+  /* Color — neutrals & text */
+  --color-ink: #0f092b;
+  --color-muted: #7d798c;
+  --color-surface: #ffffff;
+  --color-surface-tint: #f1edff;
+  --color-line: #d0cfd8;
+
+  /* Color — overlays on dark/brand surfaces */
+  --color-overlay-white-60: rgba(255, 255, 255, 0.6);
+  --color-overlay-white-40: rgba(255, 255, 255, 0.4);
+  --color-overlay-white-16: rgba(255, 255, 255, 0.16);
+  --color-overlay-white-8: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --font-display: var(--font-anton), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-pill: 100px;
+
+  /* Section rhythm */
+  --spacing-section: 64px;
+  --spacing-section-lg: 80px;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Big Anton display headings are always uppercase with tight tracking */
+.heading-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
