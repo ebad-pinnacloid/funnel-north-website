@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/lib/site";
@@ -10,22 +11,29 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="bg-ink text-white">
-      <Container className="py-16">
-        <div className="flex flex-col justify-between gap-12 lg:flex-row">
-          <div className="max-w-sm">
-            {/* TODO: replace with the Funnel North logo asset once exported from Figma */}
-            <p className="heading-display text-3xl">Funnel North</p>
-            <p className="mt-6 text-overlay-white-60">
+    <footer className="bg-black pb-8 pt-14 text-white lg:pt-[66px]">
+      <Container>
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-5 lg:w-[384px]">
+            <Link href="/" aria-label="Funnel North — home">
+              <Image
+                src="/images/logo.png"
+                alt="Funnel North"
+                width={217}
+                height={91}
+                className="h-[67px] w-auto lg:h-[91px]"
+              />
+            </Link>
+            <p className="text-base leading-6 text-white/55">
               Strategic growth, guided with clarity. A growth-focused marketing
-              agency for ambitious brands.
+              agency turning momentum into measurable results.
             </p>
-            <ul className="mt-8 flex gap-3">
+            <ul className="flex gap-2.5">
               {siteConfig.socials.map((social) => (
                 <li key={social.label}>
                   <a
                     href={social.href}
-                    className="rounded-pill border border-overlay-white-16 px-4 py-2.5 text-sm transition-colors hover:border-white"
+                    className="flex h-10 items-center rounded-pill border border-white/15 px-4 text-sm text-accent transition-colors hover:border-accent"
                   >
                     {social.label}
                   </a>
@@ -34,33 +42,33 @@ export function Footer() {
             </ul>
           </div>
 
-          <div id="newsletter" className="max-w-xl flex-1">
-            <p className="text-sm font-semibold uppercase tracking-wide text-overlay-white-60">
+          <div id="newsletter" className="w-full lg:max-w-[643px]">
+            <p className="text-[11.5px] font-semibold uppercase tracking-[2.5px] text-accent">
               Newsletter
             </p>
-            <p className="mt-2 text-lg">Growth insights, twice a month.</p>
-            {/* TODO: wire up newsletter form action */}
-            <form className="mt-6 flex gap-2 rounded-pill border border-overlay-white-16 p-2">
+            <p className="mt-3 text-xl font-bold leading-7">Growth insights, twice a month.</p>
+            {/* TODO: connect the newsletter form to a provider */}
+            <form className="mt-5 flex flex-col gap-3 sm:h-[66px] sm:flex-row sm:items-center sm:gap-2 sm:rounded-pill sm:border sm:border-white/15 sm:bg-white/5 sm:p-1.5">
               <input
                 type="email"
                 required
-                placeholder="you@company.com"
-                className="w-full bg-transparent px-4 text-sm outline-none placeholder:text-overlay-white-40"
+                placeholder="you@email.com"
+                className="h-14 flex-1 rounded-pill border border-white/15 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/40 focus:border-accent sm:h-full sm:border-0 sm:bg-transparent"
               />
               <button
                 type="submit"
-                className="shrink-0 rounded-pill bg-accent px-5 py-2.5 text-sm font-semibold text-black"
+                className="h-14 shrink-0 cursor-pointer rounded-pill bg-accent px-5 text-sm font-bold uppercase text-black transition-transform hover:scale-105 sm:h-10"
               >
-                Subscribe ↗
+                Subscribe <span aria-hidden className="font-semibold normal-case">↗</span>
               </button>
             </form>
           </div>
         </div>
 
-        <div className="mt-16 grid gap-10 border-t border-overlay-white-16 pt-12 sm:grid-cols-3">
+        <div className="mt-14 grid gap-10 border-y border-white/15 py-12 sm:grid-cols-3 lg:mt-[69px] lg:py-[61px]">
           {columns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
-              <p className="text-sm font-semibold uppercase tracking-wide text-overlay-white-60">
+              <p className="text-[11.5px] font-semibold uppercase tracking-[2.5px] text-accent">
                 {column.title}
               </p>
               <ul className="mt-5 space-y-3">
@@ -68,7 +76,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-overlay-white-60 transition-colors hover:text-white"
+                      className="text-base leading-6 text-white/65 transition-colors hover:text-white"
                     >
                       {link.label}
                     </Link>
@@ -79,13 +87,13 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col justify-between gap-4 border-t border-overlay-white-16 pt-8 text-sm text-overlay-white-60 sm:flex-row">
+        <div className="mt-7 flex flex-col justify-between gap-4 text-sm text-white/40 sm:flex-row">
           <p>© {new Date().getFullYear()} Funnel North. All rights reserved.</p>
-          <div className="flex gap-8">
-            <Link href="/privacy" className="hover:text-white">
+          <div className="flex gap-6">
+            <Link href="/privacy" className="transition-colors hover:text-white">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-white">
+            <Link href="/terms" className="transition-colors hover:text-white">
               Terms &amp; Conditions
             </Link>
           </div>
