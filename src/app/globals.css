@@ -13,6 +13,7 @@
 
   /* Color — neutrals & text */
   --color-ink: #0f092b;
+  --color-navy: #081122;
   --color-muted: #7d798c;
   --color-surface: #ffffff;
   --color-surface-tint: #f1edff;
@@ -50,4 +51,21 @@ body {
   text-transform: uppercase;
   letter-spacing: -0.015em;
   line-height: 1.05;
+}
+
+/* Infinite ticker used by the case-studies heading row */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }

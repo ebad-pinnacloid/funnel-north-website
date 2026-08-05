@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/lib/site";
 
@@ -10,18 +11,26 @@ export function Header() {
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
-      <Container className="flex items-center justify-between py-6">
-        {/* TODO: replace with the Funnel North logo asset once exported from Figma */}
-        <Link href="/" className="heading-display text-xl text-white">
-          Funnel North
+      <Container className="flex items-center justify-between py-5 lg:py-6">
+        <Link href="/" aria-label="Funnel North — home" className="shrink-0">
+          <Image
+            src="/images/logo.png"
+            alt="Funnel North"
+            width={109}
+            height={46}
+            priority
+            className="h-10 w-auto lg:h-[46px]"
+          />
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-4 md:flex">
-          {siteConfig.nav.map((item) => (
+          {siteConfig.nav.map((item, i) => (
             <Link
               key={item.label}
               href={item.href}
-              className="rounded-pill px-2.5 py-2.5 text-white/80 transition-colors hover:text-white"
+              className={`p-2.5 transition-colors hover:text-white ${
+                i === 0 ? "font-semibold text-white" : "font-medium text-[#d9d9d9]"
+              }`}
             >
               {item.label}
             </Link>
@@ -30,14 +39,14 @@ export function Header() {
 
         <Link
           href={siteConfig.cta.href}
-          className="hidden rounded-pill border border-white/40 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:border-white md:block"
+          className="hidden rounded-pill bg-accent px-6 py-3 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-105 md:block"
         >
           {siteConfig.cta.label}
         </Link>
 
         <button
           type="button"
-          className="text-white md:hidden"
+          className="flex size-12 items-center justify-center text-white md:hidden"
           aria-expanded={open}
           aria-label="Toggle navigation"
           onClick={() => setOpen((v) => !v)}
@@ -53,7 +62,7 @@ export function Header() {
       </Container>
 
       {open && (
-        <nav aria-label="Mobile" className="bg-ink/95 md:hidden">
+        <nav aria-label="Mobile" className="bg-black/95 md:hidden">
           <Container className="flex flex-col gap-1 py-4">
             {[...siteConfig.nav, siteConfig.cta].map((item) => (
               <Link
