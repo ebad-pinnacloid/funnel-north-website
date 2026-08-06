@@ -97,8 +97,8 @@ function CardHoverOverlay({ study }: { study: (typeof caseStudies)[number] }) {
 
 function MarqueeItem({ text }: { text: string }) {
   return (
-    <span className="flex items-center gap-5 px-2.5">
-      <span className="heading-display whitespace-nowrap text-5xl text-ink lg:text-[80px] lg:leading-[124px] lg:tracking-[-1.69px]">
+    <span className="flex items-center gap-3 px-1.5 lg:gap-5 lg:px-2.5">
+      <span className="heading-display whitespace-nowrap text-[46px] leading-[71px] text-ink lg:text-[80px] lg:leading-[124px] lg:tracking-[-1.69px]">
         {text}
       </span>
       <Image
@@ -106,7 +106,7 @@ function MarqueeItem({ text }: { text: string }) {
         alt=""
         width={52}
         height={52}
-        className="size-10 shrink-0 lg:size-[52px]"
+        className="size-[30px] shrink-0 lg:size-[52px]"
       />
     </span>
   );
@@ -244,12 +244,9 @@ export function CaseStudies() {
       )}
 
       {/* Static stacked layout — mobile/tablet, and the reduced-motion fallback */}
-      <div className={`pt-24 ${reducedMotion ? "" : "lg:hidden"}`}>
+      <div className={`pt-16 lg:pt-24 ${reducedMotion ? "" : "lg:hidden"}`}>
         <Eyebrow className="justify-center">Case Studies</Eyebrow>
-        <h2 className="heading-display mt-3 px-5 text-center text-[44px] leading-[1.1] text-ink sm:hidden">
-          Real Strategies Real Growth Real Results
-        </h2>
-        <div className="mt-3 hidden sm:block">
+        <div className="mt-4">
           <HeadingTicker />
         </div>
         <Container className="mt-10">

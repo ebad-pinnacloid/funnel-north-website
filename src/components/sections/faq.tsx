@@ -80,7 +80,7 @@ export function Faq() {
                     </span>
                     <span
                       aria-hidden
-                      className={`flex size-10 shrink-0 items-center justify-center rounded-full text-2xl font-medium transition-colors duration-300 ${
+                      className={`flex size-11 shrink-0 items-center justify-center rounded-full text-2xl font-medium transition-colors duration-300 lg:size-10 ${
                         isOpen ? "bg-brand text-white" : "bg-surface-tint text-brand-deep"
                       }`}
                     >

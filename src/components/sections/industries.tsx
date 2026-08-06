@@ -92,10 +92,10 @@ export function Industries() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => setActive(i)}
-                    className={`flex w-full cursor-pointer items-center gap-4 text-left transition-all duration-500 motion-reduce:transition-none ${
+                    className={`flex w-full cursor-pointer gap-4 text-left transition-all duration-500 motion-reduce:transition-none ${
                       isActive
-                        ? "min-h-[96px] rounded-3xl border-b border-transparent bg-brand p-5 lg:min-h-[130px]"
-                        : "min-h-[76px] rounded-none border-b border-black/20 bg-transparent px-5 hover:bg-black/5 lg:min-h-[116px]"
+                        ? "min-h-[96px] rounded-3xl border-b border-transparent bg-brand p-5 max-lg:flex-col max-lg:gap-2 lg:min-h-[130px] lg:items-center"
+                        : "min-h-[76px] items-center rounded-none border-b border-black/20 bg-transparent px-5 hover:bg-black/5 lg:min-h-[116px]"
                     }`}
                   >
                     <span

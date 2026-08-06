@@ -45,6 +45,14 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Hide scrollbars on horizontal scroll rows (mobile blog carousel) */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Big Anton display headings are always uppercase with tight tracking */
 .heading-display {
   font-family: var(--font-display);
