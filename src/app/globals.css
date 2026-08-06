@@ -48,16 +48,35 @@ body {
 /* Ultra-wide screens: scale the whole layout up so the 1440px design keeps
    its intended presence on 1440p/4K displays instead of floating in
    whitespace. JS scroll effects divide their transforms by this zoom. */
+:root {
+  --page-zoom: 1;
+}
+
+/* `:root` (not `html`) in every rule: `:root` has higher specificity, so a
+   base `html` rule would lose to it and the override would never apply. */
 @media (min-width: 2200px) {
-  html {
+  :root {
     zoom: 1.4;
+    --page-zoom: 1.4;
   }
 }
 
 @media (min-width: 3000px) {
-  html {
+  :root {
     zoom: 1.8;
+    --page-zoom: 1.8;
   }
+}
+
+/* Viewport units are NOT affected by the page zoom, so `100svh` would render
+   1.8x too tall on 4K. These divide by the zoom so "one screen" really is
+   one screen at every scale — use them for any full-viewport sizing. */
+@utility h-screen-z {
+  height: calc(100svh / var(--page-zoom));
+}
+
+@utility min-h-screen-z {
+  min-height: calc(600px / var(--page-zoom));
 }
 
 /* Hide scrollbars on horizontal scroll rows (mobile blog carousel) */
@@ -172,7 +191,7 @@ html.preloading .animate-hero-visual {
    query the section lays out statically. */
 @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
   .contact-stage {
-    height: 140svh;
+    height: calc(140svh / var(--page-zoom));
   }
 
   /* Shorter than the viewport on purpose: a 75svh box pinned 25svh down
@@ -181,9 +200,9 @@ html.preloading .animate-hero-visual {
      Its bottom rests exactly at the viewport bottom while pinned. */
   .contact-pin {
     position: sticky;
-    top: 25svh;
+    top: calc(25svh / var(--page-zoom));
     display: flex;
-    height: 75svh;
+    height: calc(75svh / var(--page-zoom));
     align-items: flex-end;
   }
 
@@ -193,7 +212,7 @@ html.preloading .animate-hero-visual {
   .contact-card {
     display: flex;
     width: 100%;
-    min-height: 100svh;
+    min-height: calc(100svh / var(--page-zoom));
     align-items: center;
     transform-origin: center bottom;
     will-change: transform;

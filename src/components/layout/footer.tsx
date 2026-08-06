@@ -57,13 +57,27 @@ export function Footer() {
                 type="email"
                 required
                 placeholder="you@email.com"
-                className="h-14 flex-1 rounded-pill border border-white/15 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/40 focus:border-accent sm:h-full sm:border-0 sm:bg-transparent"
+                className="h-14 w-full rounded-pill border border-white/15 bg-white/5 px-5 text-sm text-white outline-none placeholder:text-white/40 focus:border-accent sm:h-full sm:flex-1 sm:border-0 sm:bg-transparent sm:px-4"
               />
               <button
                 type="submit"
-                className="mr-6 h-14 shrink-0 cursor-pointer rounded-pill bg-accent px-5 text-sm font-bold uppercase text-black transition-transform hover:scale-105 sm:h-10"
+                className="group flex h-14 shrink-0 cursor-pointer items-center justify-between gap-4 rounded-pill bg-accent py-1 pl-6 pr-1 text-sm font-bold uppercase text-black transition-transform hover:scale-[1.02] sm:mr-3 sm:h-[46px] sm:gap-3 sm:pl-5"
               >
-                Subscribe <span aria-hidden className="font-semibold normal-case">↗</span>
+                Subscribe
+                <span
+                  aria-hidden
+                  className="flex size-[46px] items-center justify-center rounded-full bg-black text-accent transition-transform group-hover:rotate-45 sm:size-[38px]"
+                >
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M5 13L13 5M13 5H6M13 5V12"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
               </button>
             </form>
           </Reveal>
