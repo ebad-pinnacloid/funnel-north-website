@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
@@ -32,9 +35,75 @@ function Field({
 }
 
 export function Contact() {
+  const stageRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  /* Desktop fold-out: while the stage is pinned, scale the card from a folded
+     55% up to full width and fade the content in, scrubbed by scroll so
+     scrolling back up folds it again. The .contact-* CSS (globals.css) only
+     pins on lg screens without reduced motion; the same media checks here keep
+     the inline transforms in sync. */
+  useEffect(() => {
+    const stage = stageRef.current;
+    const card = cardRef.current;
+    const content = contentRef.current;
+    if (!stage || !card || !content) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      if (!desktop.matches) {
+        card.style.transform = "";
+        card.style.borderRadius = "";
+        content.style.opacity = "";
+        content.style.transform = "";
+        return;
+      }
+      // Progress runs from the stage entering the viewport (not from the pin
+      // engaging), so the card is already unfolding and the form partially
+      // visible while the user is still scrolling towards the section.
+      const rect = stage.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const progress = Math.min(Math.max((vh - rect.top) / rect.height, 0), 1);
+      // The card is bottom-anchored in the pin box; capping its scale so the
+      // top edge stays below the stage top (+ gap) guarantees it can never
+      // overlap the FAQ above, no matter the viewport. The cap loosens as the
+      // stage scrolls up, releasing the rest of the growth while pinned.
+      const boxBottom = Math.max(rect.top + 0.75 * vh, vh);
+      const scaleCap = (boxBottom - rect.top - 32) / card.offsetHeight;
+      const scale = Math.min(0.32 + 0.68 * progress, scaleCap);
+      const radius = Math.round(48 * (1 - progress));
+      card.style.transform = `scale(${scale.toFixed(4)})`;
+      card.style.borderRadius = `48px 48px ${radius}px ${radius}px`;
+      const text = Math.min(Math.max((progress - 0.1) / 0.5, 0), 1);
+      content.style.opacity = text.toFixed(3);
+      content.style.transform = `translateY(${(24 * (1 - text)).toFixed(1)}px)`;
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <section id="contact" className="rounded-t-[32px] bg-gradient-to-b from-brand to-black pb-16 pt-14 text-white lg:rounded-t-[48px] lg:pb-[86px] lg:pt-[76px]">
-      <Container className="flex flex-col gap-12 lg:flex-row lg:gap-[133px]">
+    <section ref={stageRef} id="contact" className="contact-stage">
+      <div className="contact-pin">
+        <div
+          ref={cardRef}
+          className="contact-card rounded-t-[32px] bg-gradient-to-b from-brand to-black pb-16 pt-14 text-white lg:rounded-t-[48px] lg:pb-[86px] lg:pt-[76px]"
+        >
+          <div ref={contentRef}>
+            <Container className="flex flex-col gap-12 lg:flex-row lg:gap-[133px]">
         <div className="flex flex-col gap-10 lg:w-[628px]">
           <div className="flex flex-col items-start gap-[18px]">
             <Reveal>
@@ -144,7 +213,10 @@ export function Contact() {
           </button>
           </Reveal>
         </form>
-      </Container>
+            </Container>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

@@ -61,7 +61,7 @@ export function Footer() {
               />
               <button
                 type="submit"
-                className="h-14 shrink-0 cursor-pointer rounded-pill bg-accent px-5 text-sm font-bold uppercase text-black transition-transform hover:scale-105 sm:h-10"
+                className="mr-6 h-14 shrink-0 cursor-pointer rounded-pill bg-accent px-5 text-sm font-bold uppercase text-black transition-transform hover:scale-105 sm:h-10"
               >
                 Subscribe <span aria-hidden className="font-semibold normal-case">↗</span>
               </button>

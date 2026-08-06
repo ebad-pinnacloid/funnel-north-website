@@ -29,9 +29,12 @@ export function Parallax({
     let raf = 0;
     const update = () => {
       raf = 0;
+      // Divide by the ultra-wide page zoom (globals.css) so applied
+      // transforms stay proportional to the measured offset.
+      const zoom = Number(getComputedStyle(document.documentElement).zoom) || 1;
       const rect = outer.getBoundingClientRect();
       const offset = rect.top + rect.height / 2 - window.innerHeight / 2;
-      inner.style.transform = `translateY(${(-offset * speed).toFixed(1)}px)`;
+      inner.style.transform = `translateY(${((-offset * speed) / zoom).toFixed(1)}px)`;
     };
     const schedule = () => {
       if (!raf) raf = requestAnimationFrame(update);

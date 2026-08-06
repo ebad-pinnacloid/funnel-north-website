@@ -45,6 +45,21 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Ultra-wide screens: scale the whole layout up so the 1440px design keeps
+   its intended presence on 1440p/4K displays instead of floating in
+   whitespace. JS scroll effects divide their transforms by this zoom. */
+@media (min-width: 2200px) {
+  html {
+    zoom: 1.4;
+  }
+}
+
+@media (min-width: 3000px) {
+  html {
+    zoom: 1.8;
+  }
+}
+
 /* Hide scrollbars on horizontal scroll rows (mobile blog carousel) */
 @utility scrollbar-none {
   scrollbar-width: none;
@@ -69,7 +84,9 @@ body {
 }
 
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  /* -50% now spans two of the ticker's four copies; 80s keeps the same
+     px/s speed the 40s two-copy version had. */
+  animation: marquee 80s linear infinite;
 }
 
 /* Hero entrance: gentle fade + rise, staggered per element via --rise-delay */
@@ -147,6 +164,44 @@ html.preloading .animate-hero-visual {
 
 .reveal.reveal-scale.is-visible {
   transform: none;
+}
+
+/* Contact fold: desktop-only pinned scrub — the section starts as a scaled
+   card centered in the viewport and unfolds over one viewport of scrolling.
+   The transforms are written by <Contact/>'s rAF handler; outside this media
+   query the section lays out statically. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  .contact-stage {
+    height: 140svh;
+  }
+
+  /* Shorter than the viewport on purpose: a 75svh box pinned 25svh down
+     starts holding after ~75svh of approach, leaving the rest of the stage
+     as pinned scrub time for the expansion without lengthening the page.
+     Its bottom rests exactly at the viewport bottom while pinned. */
+  .contact-pin {
+    position: sticky;
+    top: 25svh;
+    display: flex;
+    height: 75svh;
+    align-items: flex-end;
+  }
+
+  /* Bottom-anchored so the fully expanded card sits flush against the footer.
+     Full-viewport min-height means the expanded card fills the screen top to
+     bottom — no white band above it while it holds before the footer. */
+  .contact-card {
+    display: flex;
+    width: 100%;
+    min-height: 100svh;
+    align-items: center;
+    transform-origin: center bottom;
+    will-change: transform;
+  }
+
+  .contact-card > div {
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

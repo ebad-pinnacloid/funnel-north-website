@@ -63,10 +63,14 @@ export function Faq() {
             return (
               <Reveal key={faq.question} delay={Math.min(i * 0.05, 0.25)}>
                 <div
-                  className={`border-b transition-colors duration-500 first:border-t motion-reduce:transition-none ${
+                  className={`border-b transition-colors duration-500 motion-reduce:transition-none ${
+                    i === 0 ? "border-t" : ""
+                  } ${
                     isOpen
                       ? "rounded-md border-transparent bg-surface-tint"
-                      : "border-line bg-transparent hover:bg-surface-tint/40"
+                      : `border-line bg-transparent hover:bg-surface-tint/40 ${
+                          i === expanded - 1 ? "border-b-transparent" : ""
+                        }`
                   }`}
                 >
                   <button

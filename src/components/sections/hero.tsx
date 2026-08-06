@@ -13,15 +13,18 @@ const trustLogos = [
   { src: "/images/client-logo-6.png", tall: true },
 ];
 
+/* The hero always fills exactly the first screen (100svh, with a floor for
+   very short viewports); type and media use fluid viewport-based sizes so
+   the composition scales to any display. */
 export function Hero() {
   return (
-    <section className="overflow-hidden bg-black text-white">
-      <Container className="relative pt-24 lg:pt-40">
+    <section className="flex h-svh min-h-[600px] flex-col overflow-hidden bg-black text-white">
+      <Container className="flex w-full flex-1 flex-col justify-center gap-7 pt-20 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:pt-24">
         <Parallax
           speed={0.06}
-          className="mx-auto w-[336px] max-w-full lg:absolute lg:right-8 lg:top-44 lg:mx-0 lg:w-[620px] xl:right-0"
+          className="order-first w-full max-w-full lg:order-last lg:w-[43vw] lg:max-w-[820px] lg:shrink-0"
         >
-          <div className="animate-float h-[291px] overflow-hidden rounded-3xl lg:h-auto lg:overflow-visible lg:rounded-none">
+          <div className="animate-float h-[clamp(200px,30svh,330px)] overflow-hidden rounded-3xl lg:aspect-video lg:h-auto lg:max-h-[70svh] lg:rounded-none">
             <video
               src="/videos/header-3D.webm"
               autoPlay
@@ -29,19 +32,19 @@ export function Hero() {
               muted
               playsInline
               aria-hidden
-              className="animate-hero-visual size-full object-cover lg:h-auto lg:object-contain"
+              className="animate-hero-visual size-full object-cover"
             />
           </div>
         </Parallax>
 
-        <div className="relative mt-8 max-w-[570px] lg:mt-16">
-          <h1 className="heading-display animate-rise text-[54px] leading-[1.1] [--rise-delay:0.05s] sm:text-7xl lg:text-[96px] lg:leading-[106px] lg:tracking-[-1.45px]">
+        <div className="max-w-[570px] lg:w-[44vw] lg:max-w-none">
+          <h1 className="heading-display animate-rise text-[clamp(40px,13.5vw,54px)] leading-[1.08] [--rise-delay:0.05s] sm:text-7xl lg:text-[clamp(64px,6.7vw,150px)] lg:leading-[1.1]">
             Lead Growth Forward
           </h1>
-          <p className="animate-rise mt-4 max-w-[490px] text-base font-medium leading-normal text-overlay-white-60 [--rise-delay:0.2s] lg:text-xl lg:leading-7">
+          <p className="animate-rise mt-4 max-w-[490px] text-base font-medium leading-normal text-overlay-white-60 [--rise-delay:0.2s] lg:max-w-[34vw] lg:text-[clamp(16px,1.4vw,26px)] lg:leading-normal">
             {siteConfig.description}
           </p>
-          <div className="animate-rise mt-8 [--rise-delay:0.35s]">
+          <div className="animate-rise mt-7 lg:mt-9 [--rise-delay:0.35s]">
             <PillButton href={siteConfig.cta.href} className="w-full sm:w-auto">
               Book a FREE strategy call
             </PillButton>
@@ -74,7 +77,6 @@ export function Hero() {
             </div>
           </div>
         )}
-        <div className="pb-16 lg:pb-28" />
       </Container>
     </section>
   );
