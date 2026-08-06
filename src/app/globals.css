@@ -194,26 +194,28 @@ html.preloading .animate-hero-visual {
     height: calc(140svh / var(--page-zoom));
   }
 
-  /* Shorter than the viewport on purpose: a 75svh box pinned 25svh down
-     starts holding after ~75svh of approach, leaving the rest of the stage
-     as pinned scrub time for the expansion without lengthening the page.
-     Its bottom rests exactly at the viewport bottom while pinned. */
+  /* Pinned to the top of the viewport and exactly one screen tall. Anchoring
+     at the top (rather than bottom-aligning a taller card) means that if the
+     content ever exceeds the viewport — short windows, large type — it
+     overflows downward and stays scrollable, instead of pushing the heading
+     and first form fields above the top edge where they got clipped. */
   .contact-pin {
     position: sticky;
-    top: calc(25svh / var(--page-zoom));
+    top: 0;
     display: flex;
-    height: calc(75svh / var(--page-zoom));
-    align-items: flex-end;
+    height: calc(100svh / var(--page-zoom));
+    align-items: flex-start;
   }
 
-  /* Bottom-anchored so the fully expanded card sits flush against the footer.
-     Full-viewport min-height means the expanded card fills the screen top to
-     bottom — no white band above it while it holds before the footer. */
+  /* Fills the pin so the expanded card sits flush against the footer with no
+     white band. Content is centred, with padding that breathes on tall
+     screens but never squeezes the form on short ones. */
   .contact-card {
     display: flex;
     width: 100%;
     min-height: calc(100svh / var(--page-zoom));
     align-items: center;
+    padding-block: clamp(56px, calc(7svh / var(--page-zoom)), 110px);
     transform-origin: center bottom;
     will-change: transform;
   }
