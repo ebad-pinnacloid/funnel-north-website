@@ -50,9 +50,14 @@ export function Insights() {
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-[21px]">
+        {/* Mobile: horizontal scroll row per the design; grid from sm up */}
+        <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-8 overflow-x-auto px-5 pb-2 max-sm:scrollbar-none sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:mt-16 lg:grid-cols-3 lg:gap-[21px]">
           {posts.map((post, i) => (
-            <Reveal key={post.title} delay={i * 0.1} className="reveal-scale">
+            <Reveal
+              key={post.title}
+              delay={i * 0.1}
+              className="reveal-scale min-w-[321px] snap-start sm:min-w-0"
+            >
               <Link href={post.href} className="group flex flex-col gap-3.5">
                 <div className="relative aspect-square overflow-hidden rounded-[14px]">
                   <Image

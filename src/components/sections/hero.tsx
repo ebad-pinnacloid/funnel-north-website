@@ -21,7 +21,7 @@ export function Hero() {
           speed={0.06}
           className="mx-auto w-[336px] max-w-full lg:absolute lg:right-8 lg:top-44 lg:mx-0 lg:w-[620px] xl:right-0"
         >
-          <div className="animate-float">
+          <div className="animate-float h-[291px] overflow-hidden rounded-3xl lg:h-auto lg:overflow-visible lg:rounded-none">
             <video
               src="/videos/header-3D.webm"
               autoPlay
@@ -29,7 +29,7 @@ export function Hero() {
               muted
               playsInline
               aria-hidden
-              className="animate-hero-visual w-full"
+              className="animate-hero-visual size-full object-cover lg:h-auto lg:object-contain"
             />
           </div>
         </Parallax>
