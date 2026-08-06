@@ -190,11 +190,10 @@ export function CaseStudies() {
 
   return (
     <section className="bg-white">
-      {/* Pinned scroll story — desktop only, and only when motion is allowed */}
+      {/* Pinned scroll story — all viewports; motion-reduce gets the static list */}
       {!reducedMotion && (
         <div
           ref={pinRef}
-          className="hidden lg:block"
           style={{
             height: `calc(${(caseStudies.length + 1.2) * 100}svh / var(--page-zoom))`,
           }}
@@ -209,7 +208,7 @@ export function CaseStudies() {
             {/* Stage is 74% of the viewport — the 1062px card's exact ratio in
                 the 1440 design. Percentages (not vw) because the ultra-wide
                 `zoom` in globals.css compounds with viewport units. */}
-            <div className="absolute inset-0 mx-auto w-full max-w-[74%] py-12">
+            <div className="absolute inset-0 mx-auto w-full max-w-[90%] py-12 lg:max-w-[74%]">
               {caseStudies.map((study, i) => (
                 <div
                   key={study.image}
@@ -225,7 +224,7 @@ export function CaseStudies() {
                   <Link href={study.href} className="group block max-h-full w-full">
                     {/* Aspect-locked box + fill image: the visible card and
                         the hover overlay always share the exact same box. */}
-                    <span className="@container relative mx-auto block aspect-[1062/597] max-h-full w-full overflow-hidden rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)]">
+                    <span className="@container relative mx-auto block aspect-[1062/597] max-h-full w-full overflow-hidden rounded-xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)] lg:rounded-3xl">
                       <Image
                         src={study.image}
                         alt={`Case study: ${study.title}`}
@@ -235,6 +234,13 @@ export function CaseStudies() {
                       />
                       <CardHoverOverlay study={study} />
                     </span>
+                    {/* No hover on touch: title + arrow ride below the card,
+                        stacking with it. White backdrop so peeking previous
+                        cards don't show through between card and label. */}
+                    <span className="mt-3 flex items-center justify-between bg-white text-sm font-bold uppercase tracking-wide text-ink lg:hidden">
+                      {study.title}
+                      <span aria-hidden className="text-brand">↗</span>
+                    </span>
                   </Link>
                 </div>
               ))}
@@ -243,8 +249,9 @@ export function CaseStudies() {
         </div>
       )}
 
-      {/* Static stacked layout — mobile/tablet, and the reduced-motion fallback */}
-      <div className={`pt-16 lg:pt-24 ${reducedMotion ? "" : "lg:hidden"}`}>
+      {/* Static stacked layout — reduced-motion fallback on every viewport */}
+      {reducedMotion && (
+      <div className="pt-16 lg:pt-24">
         <Eyebrow className="justify-center">Case Studies</Eyebrow>
         <div className="mt-4">
           <HeadingTicker />
@@ -273,6 +280,7 @@ export function CaseStudies() {
           </div>
         </Container>
       </div>
+      )}
 
       <Container className="pb-24">
         <div className="mt-14 flex justify-center lg:mt-4">
