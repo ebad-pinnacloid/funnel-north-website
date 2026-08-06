@@ -111,11 +111,47 @@ body {
   animation: float 7s ease-in-out infinite alternate;
 }
 
+/* While the preloader curtain is up, hold entrance animations at frame 0 so
+   they play as the page is revealed (the Preloader removes this class). */
+html.preloading .animate-rise,
+html.preloading .animate-hero-visual {
+  animation-play-state: paused;
+}
+
+/* Scroll-triggered fade-in used by <Reveal/>; stagger via transition-delay */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Scale-in variant for imagery: pair with <Reveal className="reveal-scale"> */
+.reveal.reveal-scale {
+  transform: translateY(10px) scale(1.04);
+}
+
+.reveal.reveal-scale.is-visible {
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-rise,
   .animate-hero-visual,
   .animate-float {
     animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

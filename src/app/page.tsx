@@ -17,7 +17,7 @@ export default function HomePage() {
       <Services />
       <VisualBand />
       <Industries />
-      <Insights />
+      {/* <Insights /> */}
       <Faq />
       <Contact />
     </>

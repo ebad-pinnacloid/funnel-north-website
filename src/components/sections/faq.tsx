@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { Reveal } from "@/components/ui/reveal";
 
 /* Only the first answer is defined in the design; the rest are on-brand
    placeholders until real copy arrives (will come from Decap CMS). */
@@ -46,55 +47,63 @@ export function Faq() {
     <section className="bg-white py-16 lg:py-24">
       <Container>
         <div className="flex flex-col gap-5">
-          <Eyebrow>FAQ</Eyebrow>
-          <h2 className="heading-display text-[44px] leading-[1.05] text-ink lg:text-[64px] lg:leading-[69px]">
-            Frequently Asked Questions
-          </h2>
+          <Reveal>
+            <Eyebrow>FAQ</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="heading-display text-[44px] leading-[1.05] text-ink lg:text-[64px] lg:leading-[69px]">
+              Frequently Asked Questions
+            </h2>
+          </Reveal>
         </div>
 
         <div className="mt-10 lg:mt-16">
           {faqs.map((faq, i) => {
             const isOpen = i === expanded;
-            return isOpen ? (
-              <div key={faq.question} className="rounded-md bg-surface-tint px-5 py-6 lg:px-8 lg:py-11">
-                <button
-                  type="button"
-                  aria-expanded
-                  onClick={() => setExpanded(-1)}
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 text-left"
+            return (
+              <Reveal key={faq.question} delay={Math.min(i * 0.05, 0.25)}>
+                <div
+                  className={`border-b transition-colors duration-500 first:border-t motion-reduce:transition-none ${
+                    isOpen
+                      ? "rounded-md border-transparent bg-surface-tint"
+                      : "border-line bg-transparent hover:bg-surface-tint/40"
+                  }`}
                 >
-                  <span className="text-lg font-semibold tracking-[-0.4px] text-ink lg:text-2xl lg:leading-8">
-                    {faq.question}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand text-2xl font-medium text-white"
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    onClick={() => setExpanded(isOpen ? -1 : i)}
+                    className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-7 text-left lg:px-8 lg:py-10"
                   >
-                    −
-                  </span>
-                </button>
-                <p className="mt-4 max-w-[1120px] text-base leading-7 text-[#5f5b70] lg:text-lg">
-                  {faq.answer}
-                </p>
-              </div>
-            ) : (
-              <button
-                key={faq.question}
-                type="button"
-                aria-expanded={false}
-                onClick={() => setExpanded(i)}
-                className="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line px-5 py-7 text-left first:border-t last:border-b lg:px-8 lg:py-14"
-              >
-                <span className="text-lg font-semibold tracking-[-0.4px] text-ink lg:text-2xl lg:leading-8">
-                  {faq.question}
-                </span>
-                <span
-                  aria-hidden
-                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-tint text-2xl font-medium text-brand-deep"
-                >
-                  +
-                </span>
-              </button>
+                    <span className="text-lg font-semibold tracking-[-0.4px] text-ink lg:text-2xl lg:leading-8">
+                      {faq.question}
+                    </span>
+                    <span
+                      aria-hidden
+                      className={`flex size-10 shrink-0 items-center justify-center rounded-full text-2xl font-medium transition-colors duration-300 ${
+                        isOpen ? "bg-brand text-white" : "bg-surface-tint text-brand-deep"
+                      }`}
+                    >
+                      {isOpen ? "−" : "+"}
+                    </span>
+                  </button>
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-500 ease-out motion-reduce:transition-none ${
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    }`}
+                  >
+                    <div className="min-h-0 overflow-hidden">
+                      <p
+                        className={`max-w-[1120px] px-5 pb-7 text-base leading-7 text-[#5f5b70] transition-[opacity,transform] duration-500 motion-reduce:transition-none lg:px-8 lg:pb-11 lg:text-lg ${
+                          isOpen ? "opacity-100" : "translate-y-2 opacity-0"
+                        }`}
+                      >
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
             );
           })}
         </div>

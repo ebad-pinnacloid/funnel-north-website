@@ -8,13 +8,26 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { PillButton } from "@/components/ui/pill-button";
 
 const caseStudies = [
-  { image: "/images/case-study-1.jpg", title: "Title goes here", href: "/case-studies" },
-  { image: "/images/case-study-2.jpg", title: "Title goes here", href: "/case-studies" },
+  { image: "/images/case-study-1.jpg", title: "PelleDoré", href: "/case-studies" },
+  { image: "/images/case-study-2.jpg", title: "Pinnacloid Institute", href: "/case-studies" },
 ];
 
 const marqueeTexts = ["Real Strategies", "Real Growth", "Real Results"];
 
+/* Scroll choreography (fractions of pinned progress):
+   1st scroll — the ticker glides from under the eyebrow to the vertical
+   center of the card area; 2nd scroll — the next card rises and stacks on
+   the previous one, whose top edge stays visible behind the new card. */
+const TICKER_END = 0.3;
+const STACK_START = 0.38;
+const STACK_END = 0.82;
+const STACK_PEEK_PX = 36;
+const STACK_SCALE_STEP = 0.045;
+
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const easeInOutCubic = (t: number) =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -67,36 +80,53 @@ function HeadingTicker() {
 
 export function CaseStudies() {
   const pinRef = useRef<HTMLDivElement>(null);
+  const tickerOuterRef = useRef<HTMLDivElement>(null);
+  const tickerInnerRef = useRef<HTMLDivElement>(null);
+  const areaRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const reducedMotion = useReducedMotion();
 
-  /* Scroll-scrub: the container is (N+1)*100vh tall with a sticky full-screen
-     child. Progress through the container drives each card's entrance
-     (rise + fade + settle) and the previous card's exit (drift up + scale
-     down + dim), all written imperatively to avoid per-frame re-renders. */
   useEffect(() => {
     if (reducedMotion) return;
     const container = pinRef.current;
     if (!container) return;
 
     const n = caseStudies.length;
+    const segmentWidth = (STACK_END - STACK_START) / Math.max(1, n - 1);
     let raf = 0;
     const update = () => {
       raf = 0;
       const vh = window.innerHeight;
       const rect = container.getBoundingClientRect();
       const p = clamp01(-rect.top / (rect.height - vh));
-      const seg = 1 / n;
-      const entrance = seg * 0.45;
 
-      cardRefs.current.forEach((card, i) => {
+      // 1st scroll: ticker to the center of the card area (overlaying it)
+      const tickerOuter = tickerOuterRef.current;
+      const tickerInner = tickerInnerRef.current;
+      const area = areaRef.current;
+      if (tickerOuter && tickerInner && area) {
+        const areaRect = area.getBoundingClientRect();
+        const outerRect = tickerOuter.getBoundingClientRect();
+        const dy =
+          areaRect.top + areaRect.height / 2 - (outerRect.top + outerRect.height / 2);
+        const t = easeInOutCubic(clamp01(p / TICKER_END));
+        tickerInner.style.transform = `translateY(${(t * dy).toFixed(1)}px)`;
+      }
+
+      // 2nd scroll onward: each next card rises and stacks on the previous;
+      // the previous card scales back and peeks out above the new one.
+      const tIn = caseStudies.map((_, j) =>
+        j === 0
+          ? 1
+          : easeOutCubic(clamp01((p - (STACK_START + (j - 1) * segmentWidth)) / segmentWidth)),
+      );
+      cardRefs.current.forEach((card, j) => {
         if (!card) return;
-        const tIn = i === 0 ? 1 : clamp01((p - i * seg) / entrance);
-        const tOut = i === n - 1 ? 0 : clamp01((p - (i + 1) * seg) / entrance);
-        const y = (1 - tIn) * vh * 0.55 - tOut * vh * 0.12;
-        const scale = 1 - 0.15 * (1 - tIn) - 0.06 * tOut;
+        let stackedBehind = 0;
+        for (let k = j + 1; k < n; k++) stackedBehind += tIn[k];
+        const y = (1 - tIn[j]) * vh * 0.9 - STACK_PEEK_PX * stackedBehind;
+        const scale = 1 - STACK_SCALE_STEP * stackedBehind;
         card.style.transform = `translateY(${y.toFixed(1)}px) scale(${scale.toFixed(3)})`;
-        card.style.opacity = String(tIn * (1 - tOut));
       });
     };
     const schedule = () => {
@@ -119,31 +149,38 @@ export function CaseStudies() {
         <div
           ref={pinRef}
           className="hidden lg:block"
-          style={{ height: `${(caseStudies.length + 1) * 100}vh` }}
+          style={{ height: `${(caseStudies.length + 1.2) * 100}vh` }}
         >
           <div className="sticky top-0 flex h-screen flex-col overflow-hidden pt-16">
             <Eyebrow className="justify-center">Case Studies</Eyebrow>
-            <div className="mt-3">
-              <HeadingTicker />
+            {/* Outer wrapper keeps layout; inner element is translated so the
+                ticker can glide down behind the cards without reflow */}
+            <div ref={tickerOuterRef} className="mt-3">
+              <div ref={tickerInnerRef} className="relative z-0">
+                <HeadingTicker />
+              </div>
             </div>
-            <div className="relative mx-auto mb-8 mt-6 w-full max-w-[1062px] flex-1">
+            <div ref={areaRef} className="relative mx-auto mb-8 mt-6 w-full max-w-[1062px] flex-1">
               {caseStudies.map((study, i) => (
                 <div
                   key={study.image}
                   ref={(el) => {
                     cardRefs.current[i] = el;
                   }}
-                  className="absolute inset-0 flex items-start justify-center will-change-[transform,opacity]"
-                  style={{ zIndex: i + 1, opacity: i === 0 ? 1 : 0 }}
+                  className="absolute inset-0 flex items-center justify-center will-change-transform"
+                  style={{
+                    zIndex: 10 + i,
+                    transform: i === 0 ? undefined : "translateY(120vh)",
+                  }}
                 >
-                  <Link href={study.href} className="block h-full max-h-full">
+                  <Link href={study.href} className="flex max-h-full justify-center">
                     <Image
                       src={study.image}
-                      alt={`Case study ${i + 1}`}
+                      alt={`Case study: ${study.title}`}
                       width={1062}
                       height={597}
                       sizes="(max-width: 1200px) 90vw, 1062px"
-                      className="h-full w-auto max-w-full rounded-3xl object-contain"
+                      className="max-h-full w-auto max-w-full rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)]"
                     />
                   </Link>
                 </div>
@@ -164,11 +201,11 @@ export function CaseStudies() {
         </div>
         <Container className="mt-10">
           <div className="mx-auto flex max-w-[1062px] flex-col gap-8">
-            {caseStudies.map((study, i) => (
+            {caseStudies.map((study) => (
               <Link key={study.image} href={study.href} className="group block">
                 <Image
                   src={study.image}
-                  alt={`Case study ${i + 1}`}
+                  alt={`Case study: ${study.title}`}
                   width={1062}
                   height={597}
                   sizes="(max-width: 1200px) 100vw, 1062px"

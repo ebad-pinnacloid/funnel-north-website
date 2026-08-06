@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import { Reveal } from "@/components/ui/reveal";
 import { siteConfig } from "@/lib/site";
 
 const columns = [
@@ -14,7 +15,7 @@ export function Footer() {
     <footer className="bg-black pb-8 pt-14 text-white lg:pt-[66px]">
       <Container>
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-col gap-5 lg:w-[384px]">
+          <Reveal className="flex flex-col gap-5 lg:w-[384px]">
             <Link href="/" aria-label="Funnel North — home">
               <Image
                 src="/images/logo.png"
@@ -40,15 +41,18 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
 
-          <div id="newsletter" className="w-full lg:max-w-[643px]">
+          <Reveal delay={0.15} className="w-full scroll-mt-24 lg:max-w-[643px]">
             <p className="text-[11.5px] font-semibold uppercase tracking-[2.5px] text-accent">
               Newsletter
             </p>
             <p className="mt-3 text-xl font-bold leading-7">Growth insights, twice a month.</p>
             {/* TODO: connect the newsletter form to a provider */}
-            <form className="mt-5 flex flex-col gap-3 sm:h-[66px] sm:flex-row sm:items-center sm:gap-2 sm:rounded-pill sm:border sm:border-white/15 sm:bg-white/5 sm:p-1.5">
+            <form
+              id="newsletter"
+              className="mt-5 flex flex-col gap-3 sm:h-[66px] sm:flex-row sm:items-center sm:gap-2 sm:rounded-pill sm:border sm:border-white/15 sm:bg-white/5 sm:p-1.5"
+            >
               <input
                 type="email"
                 required
@@ -62,12 +66,13 @@ export function Footer() {
                 Subscribe <span aria-hidden className="font-semibold normal-case">↗</span>
               </button>
             </form>
-          </div>
+          </Reveal>
         </div>
 
         <div className="mt-14 grid gap-10 border-y border-white/15 py-12 sm:grid-cols-3 lg:mt-[69px] lg:py-[61px]">
-          {columns.map((column) => (
-            <nav key={column.title} aria-label={column.title}>
+          {columns.map((column, i) => (
+            <Reveal key={column.title} delay={i * 0.1}>
+            <nav aria-label={column.title}>
               <p className="text-[11.5px] font-semibold uppercase tracking-[2.5px] text-accent">
                 {column.title}
               </p>
@@ -84,6 +89,7 @@ export function Footer() {
                 ))}
               </ul>
             </nav>
+            </Reveal>
           ))}
         </div>
 

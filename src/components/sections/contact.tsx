@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
+import { Reveal } from "@/components/ui/reveal";
 import { siteConfig } from "@/lib/site";
 
 const services = [
@@ -36,14 +37,19 @@ export function Contact() {
       <Container className="flex flex-col gap-12 lg:flex-row lg:gap-[133px]">
         <div className="flex flex-col gap-10 lg:w-[628px]">
           <div className="flex flex-col items-start gap-[18px]">
-            <p className="rounded-pill bg-accent px-3.5 py-[7px] text-[11px] font-semibold uppercase tracking-[1.06px] text-black">
-              Let&rsquo;s Go North
-            </p>
-            <h2 className="heading-display text-[52px] leading-[1.05] sm:text-6xl lg:text-[83px] lg:leading-[88px]">
-              Ready to take your growth north?
-            </h2>
+            <Reveal>
+              <p className="rounded-pill bg-accent px-3.5 py-[7px] text-[11px] font-semibold uppercase tracking-[1.06px] text-black">
+                Let&rsquo;s Go North
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="heading-display text-[52px] leading-[1.05] sm:text-6xl lg:text-[83px] lg:leading-[88px]">
+                Ready to take your growth north?
+              </h2>
+            </Reveal>
           </div>
-          <ul className="flex flex-col gap-5">
+          <Reveal delay={0.2}>
+            <ul className="flex flex-col gap-5">
             <li>
               <a
                 href={`mailto:${siteConfig.contact.email}`}
@@ -62,20 +68,28 @@ export function Contact() {
                 {siteConfig.contact.phone}
               </a>
             </li>
-          </ul>
+            </ul>
+          </Reveal>
         </div>
 
         {/* TODO: wire the submission to an API route / form service before launch */}
         <form className="flex flex-1 flex-col gap-5 lg:max-w-[519px]">
-          <Field label="Full Name">
-            <input type="text" name="name" required placeholder="Enter your full name" className={fieldClasses} />
-          </Field>
-          <Field label="Email">
-            <input type="email" name="email" required placeholder="you@company.com" className={fieldClasses} />
-          </Field>
-          <Field label="Phone Number">
-            <input type="tel" name="phone" placeholder="Enter your phone number" className={fieldClasses} />
-          </Field>
+          <Reveal delay={0.05}>
+            <Field label="Full Name">
+              <input type="text" name="name" required placeholder="Enter your full name" className={fieldClasses} />
+            </Field>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Field label="Email">
+              <input type="email" name="email" required placeholder="you@company.com" className={fieldClasses} />
+            </Field>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <Field label="Phone Number">
+              <input type="tel" name="phone" placeholder="Enter your phone number" className={fieldClasses} />
+            </Field>
+          </Reveal>
+          <Reveal delay={0.2}>
           <Field label="Services">
             <span className="relative">
               <select
@@ -102,14 +116,18 @@ export function Contact() {
               </svg>
             </span>
           </Field>
-          <Field label="Tell us why you want to go NORTH?">
-            <textarea
-              name="message"
-              rows={5}
-              placeholder="Tell us about your goals, challenges or upcoming project…"
-              className={`${fieldClasses} h-[152px] resize-none py-4`}
-            />
-          </Field>
+          </Reveal>
+          <Reveal delay={0.25}>
+            <Field label="Tell us why you want to go NORTH?">
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Tell us about your goals, challenges or upcoming project…"
+                className={`${fieldClasses} h-[152px] resize-none py-4`}
+              />
+            </Field>
+          </Reveal>
+          <Reveal delay={0.3}>
           <button
             type="submit"
             className="group mt-4 flex h-14 w-full cursor-pointer items-center justify-between rounded-pill bg-accent py-1 pl-6 pr-1 font-semibold text-black transition-transform hover:scale-[1.01]"
@@ -124,6 +142,7 @@ export function Contact() {
               </svg>
             </span>
           </button>
+          </Reveal>
         </form>
       </Container>
     </section>
