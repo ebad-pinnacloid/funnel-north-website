@@ -8,8 +8,22 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { PillButton } from "@/components/ui/pill-button";
 
 const caseStudies = [
-  { image: "/images/case-study-1.jpg", title: "PelleDoré", href: "/case-studies" },
-  { image: "/images/case-study-2.jpg", title: "Pinnacloid Institute", href: "/case-studies" },
+  {
+    image: "/images/case-study-1.jpg",
+    title: "Skincare Expertise Patients Can Reach From Anywhere",
+    description:
+      "Funnel North helped PelleDoré launch a trusted online dermatology experience with a conversion-focused website and a patient-first brand identity.",
+    tags: ["Healthcare", "Web Design", "Brand Identity"],
+    href: "/case-studies",
+  },
+  {
+    image: "/images/case-study-2.jpg",
+    title: "Digital Identity for the Next Generation of AI Education",
+    description:
+      "Funnel North helped Pinnacloid Institute build a strong digital presence with a professional website and cohesive social media identity for its AI training programs.",
+    tags: ["Education", "AI Training", "Branding & Digital Presence"],
+    href: "/case-studies",
+  },
 ];
 
 const marqueeTexts = ["Real Strategies", "Real Growth", "Real Results"];
@@ -42,6 +56,42 @@ function useReducedMotion() {
     subscribeToReducedMotion,
     () => window.matchMedia(REDUCED_MOTION_QUERY).matches,
     () => false,
+  );
+}
+
+/**
+ * Hover state from Figma (194:3445): dark veil over the card with tag pills
+ * top-right, a lime VIEW pill center, and title + summary bottom-left.
+ * Elements rise in slightly, staggered, on hover.
+ */
+function CardHoverOverlay({ study }: { study: (typeof caseStudies)[number] }) {
+  return (
+    <div className="absolute inset-0 rounded-xl bg-black/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100 lg:rounded-3xl">
+      <div className="absolute right-5 top-5 flex max-w-[60%] translate-y-2 flex-wrap justify-end gap-1.5 opacity-0 transition-[opacity,transform] duration-500 delay-75 group-hover:translate-y-0 group-hover:opacity-100 lg:right-9 lg:top-9">
+        {study.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-pill bg-white/20 px-4 py-2.5 text-sm text-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] backdrop-blur-sm"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="flex scale-90 items-center gap-1 rounded-pill bg-accent px-6 py-3 text-sm font-bold uppercase tracking-[0.2px] text-black opacity-0 transition-[opacity,transform] duration-500 delay-100 group-hover:scale-100 group-hover:opacity-100">
+          View
+          <span aria-hidden className="text-base font-semibold normal-case">↗</span>
+        </span>
+      </div>
+
+      <div className="absolute bottom-5 left-5 max-w-[85%] translate-y-2 text-white opacity-0 transition-[opacity,transform] duration-500 delay-150 group-hover:translate-y-0 group-hover:opacity-100 lg:bottom-10 lg:left-10 lg:max-w-[46%]">
+        <p className="text-xl font-bold leading-tight lg:text-[32px] lg:leading-[41px]">
+          {study.title}
+        </p>
+        <p className="mt-2 text-sm leading-5">{study.description}</p>
+      </div>
+    </div>
   );
 }
 
@@ -173,15 +223,18 @@ export function CaseStudies() {
                     transform: i === 0 ? undefined : "translateY(120vh)",
                   }}
                 >
-                  <Link href={study.href} className="flex max-h-full justify-center">
-                    <Image
-                      src={study.image}
-                      alt={`Case study: ${study.title}`}
-                      width={1062}
-                      height={597}
-                      sizes="(max-width: 1200px) 90vw, 1062px"
-                      className="max-h-full w-auto max-w-full rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)]"
-                    />
+                  <Link href={study.href} className="group flex max-h-full justify-center">
+                    <span className="relative flex max-h-full">
+                      <Image
+                        src={study.image}
+                        alt={`Case study: ${study.title}`}
+                        width={1062}
+                        height={597}
+                        sizes="(max-width: 1200px) 90vw, 1062px"
+                        className="max-h-full w-auto max-w-full rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)]"
+                      />
+                      <CardHoverOverlay study={study} />
+                    </span>
                   </Link>
                 </div>
               ))}
@@ -203,14 +256,17 @@ export function CaseStudies() {
           <div className="mx-auto flex max-w-[1062px] flex-col gap-8">
             {caseStudies.map((study) => (
               <Link key={study.image} href={study.href} className="group block">
-                <Image
-                  src={study.image}
-                  alt={`Case study: ${study.title}`}
-                  width={1062}
-                  height={597}
-                  sizes="(max-width: 1200px) 100vw, 1062px"
-                  className="w-full rounded-xl transition-transform duration-300 group-hover:scale-[1.01] lg:rounded-3xl"
-                />
+                <span className="relative block">
+                  <Image
+                    src={study.image}
+                    alt={`Case study: ${study.title}`}
+                    width={1062}
+                    height={597}
+                    sizes="(max-width: 1200px) 100vw, 1062px"
+                    className="w-full rounded-xl transition-transform duration-300 group-hover:scale-[1.01] lg:rounded-3xl"
+                  />
+                  <CardHoverOverlay study={study} />
+                </span>
                 <span className="mt-3 flex items-center justify-between text-sm font-bold uppercase tracking-wide text-ink lg:hidden">
                   {study.title}
                   <span aria-hidden className="text-brand">↗</span>
