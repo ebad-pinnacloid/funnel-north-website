@@ -28,20 +28,22 @@ const caseStudies = [
 
 const marqueeTexts = ["Real Strategies", "Real Growth", "Real Results"];
 
-/* Scroll choreography (fractions of pinned progress):
-   1st scroll — the ticker glides from under the eyebrow to the vertical
-   center of the card area; 2nd scroll — the next card rises and stacks on
-   the previous one, whose top edge stays visible behind the new card. */
-const TICKER_END = 0.3;
-const STACK_START = 0.38;
-const STACK_END = 0.82;
+/* Scroll choreography (fractions of pinned progress): the eyebrow + ticker
+   sit vertically centered and stay put; each card (first included) rises
+   from the bottom over them and stacks on the previous one, whose top edge
+   stays visible behind the new card. */
+const STACK_START = 0.06;
+const STACK_END = 0.85;
 const STACK_PEEK_PX = 36;
 const STACK_SCALE_STEP = 0.045;
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
-const easeInOutCubic = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+/* The ultra-wide zoom (globals.css) scales rendered transforms; measured
+   rects are in zoomed pixels, so transform values must be divided back. */
+const getPageZoom = () =>
+  Number(getComputedStyle(document.documentElement).zoom) || 1;
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -86,10 +88,12 @@ function CardHoverOverlay({ study }: { study: (typeof caseStudies)[number] }) {
       </div>
 
       <div className="absolute bottom-5 left-5 max-w-[85%] translate-y-2 text-white opacity-0 transition-[opacity,transform] duration-500 delay-150 group-hover:translate-y-0 group-hover:opacity-100 lg:bottom-10 lg:left-10 lg:max-w-[46%]">
-        <p className="text-xl font-bold leading-tight lg:text-[32px] lg:leading-[41px]">
+        <p className="text-xl font-bold leading-tight lg:text-[32px] lg:leading-[41px] min-[2200px]:text-[40px] min-[2200px]:leading-[50px]">
           {study.title}
         </p>
-        <p className="mt-2 text-sm leading-5">{study.description}</p>
+        <p className="mt-2 text-sm leading-5 min-[2200px]:text-base min-[2200px]:leading-6">
+          {study.description}
+        </p>
       </div>
     </div>
   );
@@ -115,8 +119,11 @@ function MarqueeItem({ text }: { text: string }) {
 function HeadingTicker() {
   return (
     <div className="overflow-hidden" aria-hidden>
+      {/* Four copies with a -50% slide: the loop point lands on an identical
+          frame, and two copies (~4000px) stay wider than any supported
+          viewport so the track never runs out mid-cycle. */}
       <div className="animate-marquee flex w-max">
-        {[0, 1].map((copy) => (
+        {[0, 1, 2, 3].map((copy) => (
           <div key={copy} className="flex">
             {marqueeTexts.map((text) => (
               <MarqueeItem key={text} text={text} />
@@ -130,9 +137,6 @@ function HeadingTicker() {
 
 export function CaseStudies() {
   const pinRef = useRef<HTMLDivElement>(null);
-  const tickerOuterRef = useRef<HTMLDivElement>(null);
-  const tickerInnerRef = useRef<HTMLDivElement>(null);
-  const areaRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const reducedMotion = useReducedMotion();
 
@@ -142,39 +146,26 @@ export function CaseStudies() {
     if (!container) return;
 
     const n = caseStudies.length;
-    const segmentWidth = (STACK_END - STACK_START) / Math.max(1, n - 1);
+    const segmentWidth = (STACK_END - STACK_START) / n;
     let raf = 0;
     const update = () => {
       raf = 0;
+      const zoom = getPageZoom();
       const vh = window.innerHeight;
       const rect = container.getBoundingClientRect();
       const p = clamp01(-rect.top / (rect.height - vh));
 
-      // 1st scroll: ticker to the center of the card area (overlaying it)
-      const tickerOuter = tickerOuterRef.current;
-      const tickerInner = tickerInnerRef.current;
-      const area = areaRef.current;
-      if (tickerOuter && tickerInner && area) {
-        const areaRect = area.getBoundingClientRect();
-        const outerRect = tickerOuter.getBoundingClientRect();
-        const dy =
-          areaRect.top + areaRect.height / 2 - (outerRect.top + outerRect.height / 2);
-        const t = easeInOutCubic(clamp01(p / TICKER_END));
-        tickerInner.style.transform = `translateY(${(t * dy).toFixed(1)}px)`;
-      }
-
-      // 2nd scroll onward: each next card rises and stacks on the previous;
-      // the previous card scales back and peeks out above the new one.
+      // Every card rises from below the viewport in its own scroll segment
+      // and stacks over the centered ticker; previously landed cards scale
+      // back and peek out above the newest one.
       const tIn = caseStudies.map((_, j) =>
-        j === 0
-          ? 1
-          : easeOutCubic(clamp01((p - (STACK_START + (j - 1) * segmentWidth)) / segmentWidth)),
+        easeOutCubic(clamp01((p - (STACK_START + j * segmentWidth)) / (segmentWidth * 0.85))),
       );
       cardRefs.current.forEach((card, j) => {
         if (!card) return;
         let stackedBehind = 0;
         for (let k = j + 1; k < n; k++) stackedBehind += tIn[k];
-        const y = (1 - tIn[j]) * vh * 0.9 - STACK_PEEK_PX * stackedBehind;
+        const y = ((1 - tIn[j]) * vh * 1.1) / zoom - STACK_PEEK_PX * stackedBehind;
         const scale = 1 - STACK_SCALE_STEP * stackedBehind;
         card.style.transform = `translateY(${y.toFixed(1)}px) scale(${scale.toFixed(3)})`;
       });
@@ -201,37 +192,38 @@ export function CaseStudies() {
           className="hidden lg:block"
           style={{ height: `${(caseStudies.length + 1.2) * 100}vh` }}
         >
-          <div className="sticky top-0 flex h-screen flex-col overflow-hidden pt-16">
-            <Eyebrow className="justify-center">Case Studies</Eyebrow>
-            {/* Outer wrapper keeps layout; inner element is translated so the
-                ticker can glide down behind the cards without reflow */}
-            <div ref={tickerOuterRef} className="mt-3">
-              <div ref={tickerInnerRef} className="relative z-0">
-                <HeadingTicker />
-              </div>
+          <div className="sticky top-0 h-screen overflow-hidden">
+            {/* Eyebrow + ticker: vertically centered, static backdrop the
+                cards stack over (ticker keeps scrolling horizontally) */}
+            <div className="pointer-events-none absolute inset-0 z-0 flex flex-col justify-center gap-5">
+              <Eyebrow className="justify-center">Case Studies</Eyebrow>
+              <HeadingTicker />
             </div>
-            <div ref={areaRef} className="relative mx-auto mb-8 mt-6 w-full max-w-[1062px] flex-1">
+            <div className="absolute inset-0 mx-auto w-full max-w-[1062px] py-12 min-[2200px]:max-w-[1300px] min-[3000px]:max-w-[1560px]">
               {caseStudies.map((study, i) => (
                 <div
                   key={study.image}
                   ref={(el) => {
                     cardRefs.current[i] = el;
                   }}
-                  className="absolute inset-0 flex items-center justify-center will-change-transform"
+                  className="absolute inset-x-0 inset-y-12 flex items-center justify-center will-change-transform"
                   style={{
                     zIndex: 10 + i,
-                    transform: i === 0 ? undefined : "translateY(120vh)",
+                    transform: "translateY(120vh)",
                   }}
                 >
-                  <Link href={study.href} className="group flex max-h-full justify-center">
-                    <span className="relative flex max-h-full">
+                  <Link
+                    href={study.href}
+                    className="group flex max-h-full justify-center min-[2200px]:w-full"
+                  >
+                    <span className="relative flex max-h-full min-[2200px]:w-full">
                       <Image
                         src={study.image}
                         alt={`Case study: ${study.title}`}
                         width={1062}
                         height={597}
-                        sizes="(max-width: 1200px) 90vw, 1062px"
-                        className="max-h-full w-auto max-w-full rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)]"
+                        sizes="(max-width: 1200px) 90vw, (min-width: 2200px) 1560px, 1062px"
+                        className="max-h-full w-auto max-w-full rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)] min-[2200px]:w-full min-[2200px]:object-cover"
                       />
                       <CardHoverOverlay study={study} />
                     </span>
@@ -250,7 +242,7 @@ export function CaseStudies() {
           <HeadingTicker />
         </div>
         <Container className="mt-10">
-          <div className="mx-auto flex max-w-[1062px] flex-col gap-8">
+          <div className="mx-auto flex max-w-[1062px] flex-col gap-8 min-[2200px]:max-w-[1300px] min-[3000px]:max-w-[1560px]">
             {caseStudies.map((study) => (
               <Link key={study.image} href={study.href} className="group block">
                 <span className="relative block">
