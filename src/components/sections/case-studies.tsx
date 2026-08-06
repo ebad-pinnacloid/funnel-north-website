@@ -173,6 +173,10 @@ export function CaseStudies() {
         const y = ((1 - tIn[j]) * vh * 1.1) / zoom - STACK_PEEK_PX * stackedBehind;
         const scale = 1 - STACK_SCALE_STEP * stackedBehind;
         card.style.transform = `translateY(${y.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+        // The mobile title row under a card fades out as the next card stacks
+        // over it, so covered cards never bleed their label into the new one.
+        const title = card.querySelector<HTMLElement>("[data-card-title]");
+        if (title) title.style.opacity = (1 - Math.min(1, stackedBehind * 1.5)).toFixed(3);
       });
     };
     const schedule = () => {
@@ -235,11 +239,14 @@ export function CaseStudies() {
                       <CardHoverOverlay study={study} />
                     </span>
                     {/* No hover on touch: title + arrow ride below the card,
-                        stacking with it. White backdrop so peeking previous
-                        cards don't show through between card and label. */}
-                    <span className="mt-3 flex items-center justify-between bg-white text-sm font-bold uppercase tracking-wide text-ink lg:hidden">
-                      {study.title}
-                      <span aria-hidden className="text-brand">↗</span>
+                        stacking with it; the scroll handler fades this row out
+                        once the next card covers it. */}
+                    <span
+                      data-card-title
+                      className="mt-3 flex items-start justify-between gap-3 text-[13px] font-bold uppercase leading-snug tracking-wide text-ink lg:hidden"
+                    >
+                      <span className="min-w-0 flex-1">{study.title}</span>
+                      <span aria-hidden className="shrink-0 text-brand">↗</span>
                     </span>
                   </Link>
                 </div>
