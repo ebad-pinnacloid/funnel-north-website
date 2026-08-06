@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anton, Inter } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Preloader } from "@/components/layout/preloader";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -57,10 +58,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${anton.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* Hold entrance animations until the preloader reveals the page;
+            without JS the preloader is hidden and animations run normally. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('preloading')",
+          }}
+        />
+        <noscript>
+          <style>{"#preloader{display:none}"}</style>
+        </noscript>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
+        <Preloader />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
