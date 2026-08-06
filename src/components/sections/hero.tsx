@@ -18,7 +18,7 @@ const trustLogos = [
    the composition scales to any display. */
 export function Hero() {
   return (
-    <section className="flex h-svh min-h-[600px] flex-col overflow-hidden bg-black text-white">
+    <section className="flex h-screen-z min-h-screen-z flex-col overflow-hidden bg-black text-white">
       <Container className="flex w-full flex-1 flex-col justify-center gap-7 pt-20 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:pt-24">
         <Parallax
           speed={0.06}

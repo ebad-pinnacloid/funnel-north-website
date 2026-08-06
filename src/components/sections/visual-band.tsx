@@ -65,8 +65,12 @@ export function VisualBand() {
   }, []);
 
   return (
-    <section ref={sectionRef} aria-hidden className="relative h-[300svh]">
-      <div className="sticky top-0 h-svh overflow-hidden bg-black">
+    <section
+      ref={sectionRef}
+      aria-hidden
+      className="relative h-[calc(300svh/var(--page-zoom))]"
+    >
+      <div className="sticky top-0 h-screen-z overflow-hidden bg-black">
         <div ref={frameRef} className="size-full will-change-[transform,opacity]">
           {shouldLoad && (
             <video

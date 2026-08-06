@@ -69,11 +69,16 @@ function useReducedMotion() {
 function CardHoverOverlay({ study }: { study: (typeof caseStudies)[number] }) {
   return (
     <div className="absolute inset-0 rounded-xl bg-black/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100 lg:rounded-3xl">
-      <div className="absolute right-5 top-5 flex max-w-[60%] translate-y-2 flex-wrap justify-end gap-1.5 opacity-0 transition-[opacity,transform] duration-500 delay-75 group-hover:translate-y-0 group-hover:opacity-100 lg:right-9 lg:top-9">
+      {/* Percentage insets and container-query (cqw) type: every element is
+          sized as a ratio of the card itself, so the overlay stays perfectly
+          proportioned on any screen — and unlike vw, cqw doesn't compound
+          with the ultra-wide page zoom. Ratios come from the 1440 design
+          (32px title on a 1062px card = 3.01cqw, etc.). */}
+      <div className="absolute right-[3.6%] top-[6%] flex max-w-[60%] translate-y-2 flex-wrap justify-end gap-1.5 opacity-0 transition-[opacity,transform] duration-500 delay-75 group-hover:translate-y-0 group-hover:opacity-100 lg:gap-[0.56cqw]">
         {study.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-pill bg-white/20 px-4 py-2.5 text-sm text-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] backdrop-blur-sm"
+            className="rounded-pill bg-white/20 px-4 py-2.5 text-sm text-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] backdrop-blur-sm lg:px-[1.5cqw] lg:py-[0.94cqw] lg:text-[1.32cqw]"
           >
             {tag}
           </span>
@@ -81,17 +86,17 @@ function CardHoverOverlay({ study }: { study: (typeof caseStudies)[number] }) {
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="flex scale-90 items-center gap-1 rounded-pill bg-accent px-6 py-3 text-sm font-bold uppercase tracking-[0.2px] text-black opacity-0 transition-[opacity,transform] duration-500 delay-100 group-hover:scale-100 group-hover:opacity-100">
+        <span className="flex scale-90 items-center gap-1 rounded-pill bg-accent px-6 py-3 text-sm font-bold uppercase tracking-[0.2px] text-black opacity-0 transition-[opacity,transform] duration-500 delay-100 group-hover:scale-100 group-hover:opacity-100 lg:px-[2.26cqw] lg:py-[1.13cqw] lg:text-[1.32cqw]">
           View
-          <span aria-hidden className="text-base font-semibold normal-case">↗</span>
+          <span aria-hidden className="text-base font-semibold normal-case lg:text-[1.5cqw]">↗</span>
         </span>
       </div>
 
-      <div className="absolute bottom-5 left-5 max-w-[85%] translate-y-2 text-white opacity-0 transition-[opacity,transform] duration-500 delay-150 group-hover:translate-y-0 group-hover:opacity-100 lg:bottom-10 lg:left-10 lg:max-w-[46%]">
-        <p className="text-xl font-bold leading-tight lg:text-[32px] lg:leading-[41px] min-[2200px]:text-[40px] min-[2200px]:leading-[50px]">
+      <div className="absolute bottom-[7.3%] left-[3.65%] max-w-[85%] translate-y-2 text-white opacity-0 transition-[opacity,transform] duration-500 delay-150 group-hover:translate-y-0 group-hover:opacity-100 lg:max-w-[46%]">
+        <p className="text-xl font-bold leading-tight lg:text-[3.01cqw] lg:leading-[1.28]">
           {study.title}
         </p>
-        <p className="mt-2 text-sm leading-5 min-[2200px]:text-base min-[2200px]:leading-6">
+        <p className="mt-2 text-sm leading-5 lg:mt-[0.75cqw] lg:text-[1.32cqw] lg:leading-[1.45]">
           {study.description}
         </p>
       </div>
@@ -190,16 +195,21 @@ export function CaseStudies() {
         <div
           ref={pinRef}
           className="hidden lg:block"
-          style={{ height: `${(caseStudies.length + 1.2) * 100}vh` }}
+          style={{
+            height: `calc(${(caseStudies.length + 1.2) * 100}svh / var(--page-zoom))`,
+          }}
         >
-          <div className="sticky top-0 h-screen overflow-hidden">
+          <div className="sticky top-0 h-screen-z overflow-hidden">
             {/* Eyebrow + ticker: vertically centered, static backdrop the
                 cards stack over (ticker keeps scrolling horizontally) */}
             <div className="pointer-events-none absolute inset-0 z-0 flex flex-col justify-center gap-5">
               <Eyebrow className="justify-center">Case Studies</Eyebrow>
               <HeadingTicker />
             </div>
-            <div className="absolute inset-0 mx-auto w-full max-w-[1062px] py-12 min-[2200px]:max-w-[1300px] min-[3000px]:max-w-[1560px]">
+            {/* Stage is 74% of the viewport — the 1062px card's exact ratio in
+                the 1440 design. Percentages (not vw) because the ultra-wide
+                `zoom` in globals.css compounds with viewport units. */}
+            <div className="absolute inset-0 mx-auto w-full max-w-[74%] py-12">
               {caseStudies.map((study, i) => (
                 <div
                   key={study.image}
@@ -212,18 +222,16 @@ export function CaseStudies() {
                     transform: "translateY(120vh)",
                   }}
                 >
-                  <Link
-                    href={study.href}
-                    className="group flex max-h-full justify-center min-[2200px]:w-full"
-                  >
-                    <span className="relative flex max-h-full min-[2200px]:w-full">
+                  <Link href={study.href} className="group block max-h-full w-full">
+                    {/* Aspect-locked box + fill image: the visible card and
+                        the hover overlay always share the exact same box. */}
+                    <span className="@container relative mx-auto block aspect-[1062/597] max-h-full w-full overflow-hidden rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)]">
                       <Image
                         src={study.image}
                         alt={`Case study: ${study.title}`}
-                        width={1062}
-                        height={597}
-                        sizes="(max-width: 1200px) 90vw, (min-width: 2200px) 1560px, 1062px"
-                        className="max-h-full w-auto max-w-full rounded-3xl shadow-[0_-12px_40px_rgba(15,9,43,0.18)] min-[2200px]:w-full min-[2200px]:object-cover"
+                        fill
+                        sizes="(max-width: 1023px) 90vw, 74vw"
+                        className="object-cover"
                       />
                       <CardHoverOverlay study={study} />
                     </span>
@@ -242,7 +250,7 @@ export function CaseStudies() {
           <HeadingTicker />
         </div>
         <Container className="mt-10">
-          <div className="mx-auto flex max-w-[1062px] flex-col gap-8 min-[2200px]:max-w-[1300px] min-[3000px]:max-w-[1560px]">
+          <div className="mx-auto flex max-w-[1062px] flex-col gap-8">
             {caseStudies.map((study) => (
               <Link key={study.image} href={study.href} className="group block">
                 <span className="relative block">
