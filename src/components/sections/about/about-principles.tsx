@@ -45,10 +45,10 @@ export function AboutPrinciples() {
             <li key={principle.title.join(" ")}>
               <Reveal delay={Math.min(i * 0.05, 0.2)}>
                 <div className="group grid gap-x-4 gap-y-3 rounded-3xl bg-[#1a1a1a] p-6 transition-colors duration-500 hover:bg-accent motion-reduce:transition-none lg:h-[132px] lg:grid-cols-[104px_384px_1fr_154px] lg:items-center lg:gap-0 lg:p-0 lg:pl-8 lg:pr-[46px]">
-                  <span className="heading-display text-[36px] leading-none text-white/50 transition-colors duration-500 group-hover:text-black motion-reduce:transition-none lg:text-[44px] lg:leading-[52px]!">
+                  <span className="heading-display text-[36px] leading-none text-white/50 transition-colors duration-500 group-hover:text-black motion-reduce:transition-none lg:text-[44px] lg:leading-[52px]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="heading-display text-[28px] leading-[1.1] text-white transition-colors duration-500 group-hover:text-ink motion-reduce:transition-none lg:max-w-[310px] lg:text-[34px] lg:leading-[38px]!">
+                  <h3 className="heading-display text-[28px] leading-[1.1] text-white transition-colors duration-500 group-hover:text-ink motion-reduce:transition-none lg:max-w-[310px] lg:text-[34px] lg:leading-[38px]">
                     {principle.title[0]}
                     <br />
                     {principle.title[1]}

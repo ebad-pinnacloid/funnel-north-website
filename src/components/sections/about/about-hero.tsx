@@ -5,16 +5,14 @@ import Image from "next/image";
  *
  * The type scales with the viewport but caps at the 1440 design value (283px)
  * so the ultra-wide `zoom` in globals.css scales it like the rest of the page
- * instead of compounding with vw. The styles are applied directly rather than
- * through `.heading-display` because that rule is unlayered CSS and would beat
- * the `leading-*` utility this layout depends on — Anton's content box is
- * ~1.5em tall, so the line height is what places the baseline against the
- * photo's top edge.
+ * instead of compounding with vw. Anton's content box is ~1.5em tall, so the
+ * line height — not a margin — is what sets the baseline against the photo's
+ * top edge; the 0.936 here reproduces the design's 12px gap.
  */
 export function AboutHero() {
   return (
     <section className="bg-white pt-[clamp(112px,13.96vw,201px)]">
-      <h1 className="animate-rise text-center font-display text-[clamp(52px,19.68vw,283px)] uppercase leading-[0.936] tracking-[-0.015em] text-brand">
+      <h1 className="heading-display animate-rise text-center text-[clamp(52px,19.68vw,283px)] leading-[0.936] text-brand">
         Who we are
       </h1>
       <div className="animate-hero-visual relative aspect-[1440/750] w-full">

@@ -75,7 +75,7 @@ export function AboutWhy() {
               <Eyebrow tone="deep">Why Funnel North</Eyebrow>
             </Reveal>
             <Reveal delay={0.1}>
-              <h2 className="heading-display mt-5 text-[48px] text-ink lg:text-[86px] lg:leading-[92px]!">
+              <h2 className="heading-display mt-5 text-[48px] text-ink lg:text-[86px] lg:leading-[92px]">
                 <span className="lg:block">Direction</span>{" "}
                 <span className="lg:block">changes</span>{" "}
                 <span className="lg:block">everything.</span>
@@ -101,7 +101,7 @@ export function AboutWhy() {
                 <Reveal delay={Math.min(i * 0.05, 0.2)}>
                   <div className="flex gap-6 border-b border-line-subtle py-6 lg:gap-[64px] lg:py-[34px]">
                     <span
-                      className={`heading-display shrink-0 text-[40px] leading-none transition-colors duration-500 motion-reduce:transition-none lg:w-[56px] lg:text-[56px] lg:leading-[64px]! ${
+                      className={`heading-display shrink-0 text-[40px] leading-none transition-colors duration-500 motion-reduce:transition-none lg:w-[56px] lg:text-[56px] lg:leading-[64px] ${
                         i === active ? "text-brand" : "text-muted"
                       }`}
                     >

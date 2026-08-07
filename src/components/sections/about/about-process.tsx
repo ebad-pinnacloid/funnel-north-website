@@ -50,7 +50,7 @@ export function AboutProcess() {
           <Eyebrow className="lg:justify-center">How we work</Eyebrow>
         </Reveal>
         <Reveal delay={0.1}>
-          <h2 className="heading-display mt-5 text-center text-[40px] text-ink lg:text-[70px] lg:leading-[71px]!">
+          <h2 className="heading-display mt-5 text-center text-[40px] text-ink lg:text-[70px] lg:leading-[71px]">
             How we build success
           </h2>
         </Reveal>

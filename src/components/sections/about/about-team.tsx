@@ -117,7 +117,7 @@ export function AboutTeam() {
             {/* Identity panel: always legible on touch, lifts in on hover */}
             <div className="absolute inset-x-0 bottom-0 h-[170px] bg-gradient-to-b from-ink/0 to-ink opacity-100 transition-opacity duration-500 motion-reduce:transition-none lg:opacity-0 lg:group-hover:opacity-100" />
             <div className="absolute inset-x-6 bottom-6 text-white opacity-100 transition-opacity duration-500 motion-reduce:transition-none lg:opacity-0 lg:group-hover:opacity-100">
-              <p className="heading-display text-[24px] lg:text-[28px] lg:leading-[34px]!">
+              <p className="heading-display text-[24px] lg:text-[28px] lg:leading-[34px]">
                 {member.name}
               </p>
               <p className="mt-1 text-[11px] font-semibold uppercase leading-4 tracking-[1px]">
