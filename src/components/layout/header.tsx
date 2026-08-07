@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/site";
 
 /* Routes whose hero is a light surface: the header inverts to the dark
    wordmark and ink nav so it stays legible (Figma "About us", node 455:1520). */
-const LIGHT_HEADER_ROUTES = ["/about"];
+const LIGHT_HEADER_ROUTES = ["/about", "/case-studies"];
 
 export function Header() {
   const [open, setOpen] = useState(false);
