@@ -3,6 +3,7 @@ import { ContactHero } from "@/components/sections/contact-page/contact-hero";
 import { ContactFormCard } from "@/components/sections/contact-page/contact-form-card";
 import { ContactDetails } from "@/components/sections/contact-page/contact-details";
 import { ContactLocations } from "@/components/sections/contact-page/contact-locations";
+import { Contact } from "@/components/sections/contact";
 
 const title = "Contact Us";
 const description =
@@ -23,6 +24,7 @@ export default function ContactPage() {
       <ContactFormCard />
       <ContactDetails />
       <ContactLocations />
+      <Contact />
     </>
   );
 }
