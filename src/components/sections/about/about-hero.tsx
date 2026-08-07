@@ -1,28 +1,34 @@
-import Image from "next/image";
-
 /**
- * Oversized purple wordmark sitting directly on a full-bleed team photo.
+ * Oversized purple wordmark that the video below deliberately crops.
  *
- * The type scales with the viewport but caps at the 1440 design value (283px)
- * so the ultra-wide `zoom` in globals.css scales it like the rest of the page
- * instead of compounding with vw. Anton's content box is ~1.5em tall, so the
- * line height — not a margin — is what sets the baseline against the photo's
- * top edge; the 0.936 here reproduces the design's 12px gap.
+ * Geometry mirrors the 1440 frame exactly: the text box starts at y=152.6 with
+ * a 1.1 line height (311.8px), and the visual starts at y=397 — overlapping the
+ * box by 67.6px, which cuts roughly the bottom 36px off the letterforms. The
+ * visual is the later, positioned element so it paints over the type, as in the
+ * design. Every value scales with the viewport but caps at its 1440 figure so
+ * the ultra-wide `zoom` in globals.css scales the composition as a whole rather
+ * than compounding with vw.
+ *
+ * The band plays the same footage as the homepage visual band; about-hero.jpg
+ * is a frame from it, so it doubles as the poster and paints instantly while
+ * the webm buffers.
  */
 export function AboutHero() {
   return (
-    <section className="bg-white pt-[clamp(112px,13.96vw,201px)]">
-      <h1 className="heading-display animate-rise text-center text-[clamp(52px,19.68vw,283px)] leading-[0.936] text-brand">
+    <section className="bg-white pt-[clamp(96px,10.6vw,152px)]">
+      <h1 className="heading-display animate-rise text-center text-[clamp(52px,19.68vw,283px)] leading-[1.1] text-brand">
         Who we are
       </h1>
-      <div className="animate-hero-visual relative aspect-[1440/750] w-full">
-        <Image
-          src="/images/about-hero.jpg"
-          alt="The Funnel North team reviewing a campaign timeline and performance reports together"
-          fill
-          sizes="100vw"
-          priority
-          className="object-cover"
+      <div className="animate-hero-visual relative -mt-[clamp(10px,4.69vw,68px)] aspect-[1440/750] w-full overflow-hidden">
+        <video
+          src="/videos/demo-video.webm"
+          poster="/images/about-hero.jpg"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden
+          className="size-full object-cover"
         />
       </div>
     </section>

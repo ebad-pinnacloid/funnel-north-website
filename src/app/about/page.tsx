@@ -7,6 +7,7 @@ import { AboutWhy } from "@/components/sections/about/about-why";
 import { AboutPrinciples } from "@/components/sections/about/about-principles";
 import { AboutTeam } from "@/components/sections/about/about-team";
 import { Faq } from "@/components/sections/faq";
+import { Contact } from "@/components/sections/contact";
 
 const title = "About Us";
 const description =
@@ -31,6 +32,7 @@ export default function AboutPage() {
       <AboutPrinciples />
       <AboutTeam />
       <Faq />
+      <Contact />
     </>
   );
 }
