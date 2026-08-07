@@ -46,7 +46,7 @@ export function ImpactBento({ onDark = false }: { onDark?: boolean }) {
             ))}
           </div>
           <p className="ml-2.5 text-sm font-semibold tracking-[-0.2px] text-black">
-            60+ Active Clients
+            <CountUp end={60} suffix="+" /> Active Clients
           </p>
         </Reveal>
       </Reveal>

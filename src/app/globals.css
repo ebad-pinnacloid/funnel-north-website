@@ -22,9 +22,17 @@
   --color-line: #d0cfd8;
   --color-line-subtle: #e7e7ec;
 
-  /* Color — soft card tints (About page process grid) */
+  /* Color — soft card tints (About process grid, case-study stat cards) */
   --color-lime-soft: #f3ff8b;
   --color-purple-soft: #dccaff;
+  --color-blue-soft: #e8f0ff;
+  --color-lime-wash: #faffcd;
+
+  /* Color — case-study dark performance band */
+  --color-carbon: #0e1116;
+  --color-carbon-card: #181c22;
+  --color-carbon-chrome: #12161b;
+  --color-carbon-muted: #9ea6b2;
 
   /* Color — overlays on dark/brand surfaces */
   --color-overlay-white-60: rgba(255, 255, 255, 0.6);

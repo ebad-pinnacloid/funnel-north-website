@@ -11,12 +11,16 @@ export function CountUp({
   end,
   suffix = "",
   duration = 1500,
+  grouped = false,
 }: {
   end: number;
   suffix?: string;
   duration?: number;
+  /** Render thousands separators (230,000) — used by the case-study stats. */
+  grouped?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const format = (n: number) => (grouped ? n.toLocaleString("en-US") : `${n}`);
 
   useEffect(() => {
     const el = ref.current;
@@ -33,10 +37,10 @@ export function CountUp({
           start ||= now;
           const t = Math.min((now - start) / duration, 1);
           const eased = 1 - Math.pow(1 - t, 3);
-          el.textContent = `${Math.round(eased * end)}${suffix}`;
+          el.textContent = `${format(Math.round(eased * end))}${suffix}`;
           if (t < 1) raf = requestAnimationFrame(tick);
         };
-        el.textContent = `0${suffix}`;
+        el.textContent = `${format(0)}${suffix}`;
         raf = requestAnimationFrame(tick);
       },
       { threshold: 0.4 },
@@ -46,11 +50,12 @@ export function CountUp({
       io.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [end, suffix, duration]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [end, suffix, duration, grouped]);
 
   return (
     <span ref={ref}>
-      {end}
+      {format(end)}
       {suffix}
     </span>
   );
