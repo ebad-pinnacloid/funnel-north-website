@@ -22,10 +22,12 @@ export const metadata: Metadata = {
 export default function KnRemodelingCaseStudyPage() {
   return (
     <>
+      {/* The detail hero uses the clean photograph, not the tinted, branded
+          crop the listing card carries (Figma 710:6811). */}
       <CaseStudyHero
         title={title}
-        image="/images/case-study-3.jpg"
-        imageAlt="KN Remodeling — a renovated open-plan kitchen with an island and bar stools"
+        image="/images/case-study-3-hero.jpg"
+        imageAlt="A renovated open-plan kitchen with a large island, pendant lights and bar stools"
       />
       <CaseStudyOverview />
       <CaseStudyChallenge />

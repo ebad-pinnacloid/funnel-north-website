@@ -17,7 +17,7 @@ export function CaseStudyHero({
         <h1 className="animate-rise text-center text-[clamp(34px,5.28vw,76px)] font-semibold leading-[1.1] tracking-[-0.05em] text-[#080d0d]">
           {title}
         </h1>
-        <div className="animate-hero-visual relative mx-auto mt-[clamp(24px,2.85vw,41px)] aspect-[1060/597] w-full max-w-[1060px] overflow-hidden rounded-3xl">
+        <div className="animate-hero-visual relative mx-auto mt-[clamp(24px,2.85vw,41px)] aspect-[1060/597] w-full max-w-[1060px] overflow-hidden rounded-2xl lg:rounded-[28.6px]">
           <Image
             src={image}
             alt={imageAlt}
