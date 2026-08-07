@@ -10,8 +10,8 @@ export const siteConfig = {
   description:
     "Funnel North is the growth partner for ambitious brands. We combine sharp strategy with bold creative to turn attention into measurable revenue.",
   contact: {
-    email: "hello@funnelnorth.com",
-    phone: "+1 2345 67891",
+    email: "info@funnelnorth.com",
+    phone: "+1 (512) 760-8625",
   },
   socials: [
     { label: "LinkedIn", href: "https://www.linkedin.com/company/funnel-north/" },

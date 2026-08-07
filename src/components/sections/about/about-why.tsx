@@ -99,7 +99,15 @@ export function AboutWhy() {
             {chapters.map((chapter, i) => (
               <li key={chapter.heading}>
                 <Reveal delay={Math.min(i * 0.05, 0.2)}>
-                  <div className="flex gap-6 border-b border-line-subtle py-6 lg:gap-[64px] lg:py-[34px]">
+                  {/* The chapter the rail has reached takes the design's active
+                      treatment — brand number, its marker dot, and full-contrast
+                      copy; the rest sit back. Everything is a transition rather
+                      than a swap so passing the rail reads as a fade. */}
+                  <div
+                    className={`relative flex gap-6 border-b border-line-subtle py-6 transition-opacity duration-500 motion-reduce:transition-none lg:gap-[64px] lg:py-[34px] ${
+                      i === active ? "opacity-100" : "opacity-50"
+                    }`}
+                  >
                     <span
                       className={`heading-display shrink-0 text-[40px] leading-none transition-colors duration-500 motion-reduce:transition-none lg:w-[56px] lg:text-[56px] lg:leading-[64px] ${
                         i === active ? "text-brand" : "text-muted"
@@ -107,6 +115,12 @@ export function AboutWhy() {
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
+                    <span
+                      aria-hidden
+                      className={`absolute left-[76px] top-[42px] hidden size-[7px] rounded-full bg-brand transition-opacity duration-500 motion-reduce:transition-none lg:block ${
+                        i === active ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
                     <div className="lg:max-w-[520px]">
                       <h3 className="text-lg font-semibold uppercase text-ink lg:text-[22px]">
                         {chapter.heading}

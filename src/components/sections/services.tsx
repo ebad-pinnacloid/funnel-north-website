@@ -61,14 +61,16 @@ const services = [
   },
 ];
 
-export function Services() {
+/** `eyebrow` differs by page: "Our Services" on the homepage, "Services we
+ *  offer" on /services — the section is otherwise identical in both frames. */
+export function Services({ eyebrow = "Our Services" }: { eyebrow?: string }) {
   const [expanded, setExpanded] = useState(0);
 
   return (
     <section className="bg-white py-16 lg:py-24">
       <Container className="flex flex-col gap-5 lg:items-center">
         <Reveal>
-          <Eyebrow className="lg:justify-center">Our Services</Eyebrow>
+          <Eyebrow className="lg:justify-center">{eyebrow}</Eyebrow>
         </Reveal>
         <Reveal delay={0.1}>
           <h2 className="heading-display text-[44px] leading-[1.05] text-ink lg:whitespace-nowrap lg:text-center lg:text-[64px] lg:leading-[69px]">

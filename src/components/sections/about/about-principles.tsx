@@ -21,6 +21,11 @@ const principles = [
   },
 ];
 
+/** Where the first panel pins — clear of the fixed header. */
+const STACK_TOP = 132;
+/** Extra offset per panel, i.e. how much of each one stays peeking out. */
+const STACK_STEP = 22;
+
 /**
  * "Principles over promises" — four editorial panels on black. Each panel rests
  * dark and takes the designed lime Active treatment on hover, which the Figma
@@ -40,9 +45,19 @@ export function AboutPrinciples() {
           </h2>
         </Reveal>
 
-        <ul className="mt-10 flex flex-col gap-4 lg:mt-[10px] lg:pt-[10px]">
+        {/* Sticky stack: each panel pins a little lower than the one before, so
+            scrolling deals them onto each other and every panel keeps a sliver
+            of its top edge visible. The panels stay stuck until the whole list
+            scrolls past, since a sticky element is bound by its parent. The
+            travel between them comes from lg:mb-*, and the mobile column keeps
+            the plain gap-4 flow. */}
+        <ul className="mt-10 flex flex-col gap-4 lg:mt-[10px] lg:block lg:pt-[10px]">
           {principles.map((principle, i) => (
-            <li key={principle.title.join(" ")}>
+            <li
+              key={principle.title.join(" ")}
+              className={`lg:sticky ${i < principles.length - 1 ? "lg:mb-[136px]" : ""}`}
+              style={{ top: `${STACK_TOP + i * STACK_STEP}px` }}
+            >
               <Reveal delay={Math.min(i * 0.05, 0.2)}>
                 <div className="group grid gap-x-4 gap-y-3 rounded-3xl bg-[#1a1a1a] p-6 transition-colors duration-500 hover:bg-accent motion-reduce:transition-none lg:h-[132px] lg:grid-cols-[104px_384px_1fr_154px] lg:items-center lg:gap-0 lg:p-0 lg:pl-8 lg:pr-[46px]">
                   <span className="heading-display text-[36px] leading-none text-white/50 transition-colors duration-500 group-hover:text-black motion-reduce:transition-none lg:text-[44px] lg:leading-[52px]">
