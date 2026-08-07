@@ -24,6 +24,14 @@ const caseStudies = [
     tags: ["Education", "AI Training", "Branding & Digital Presence"],
     href: "/case-studies",
   },
+  {
+    image: "/images/case-study-3.jpg",
+    title: "Scaling Lead Generation with Meta Advertising",
+    description:
+      "KN Remodeling partnered with Funnel North to scale high-quality lead generation for kitchen and bathroom renovation services using Meta advertising.",
+    tags: ["Home Remodeling", "Lead Generation", "META Advertising"],
+    href: "/case-studies",
+  },
 ];
 
 const marqueeTexts = ["Real Strategies", "Real Growth", "Real Results"];
