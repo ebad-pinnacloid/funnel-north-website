@@ -30,7 +30,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "KN Remodeling partnered with Funnel North to scale high-quality lead generation for kitchen and bathroom renovation services using Meta advertising.",
     tags: ["Home Remodeling", "Lead Generation", "META Advertising"],
-    href: "/case-studies",
+    href: "/case-studies/kn-remodeling",
   },
 ];
 

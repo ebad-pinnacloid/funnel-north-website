@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CaseStudiesHero } from "@/components/sections/case-studies-page/case-studies-hero";
 import { CaseStudiesGrid } from "@/components/sections/case-studies-page/case-studies-grid";
+import { Contact } from "@/components/sections/contact";
 
 const title = "Case Studies";
 const description =
@@ -19,6 +20,7 @@ export default function CaseStudiesPage() {
     <>
       <CaseStudiesHero />
       <CaseStudiesGrid />
+      <Contact />
     </>
   );
 }
