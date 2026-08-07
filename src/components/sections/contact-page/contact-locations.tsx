@@ -6,10 +6,16 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 
 const locations = [
-  { city: "Toronto, Canada", detail: "HQ — 100 King St W, Downtown", pin: { left: "43%", top: "35%" } },
-  { city: "New York, USA", detail: "5th Avenue, Manhattan", pin: { left: "58%", top: "54%" } },
-  { city: "London, UK", detail: "Shoreditch, East London", pin: { left: "31%", top: "62%" } },
-  { city: "Dubai, UAE", detail: "Business Bay, Downtown", pin: { left: "66%", top: "26%" } },
+  {
+    city: "Austin, TX, USA",
+    detail: "78731",
+    pin: { left: "32%", top: "46%" },
+  },
+  {
+    city: "Lahore, Pakistan",
+    detail: "Pinnacloid — near Ramada, Block N Gulberg III, 54660",
+    pin: { left: "64%", top: "34%" },
+  },
 ];
 
 /** The 20px map pin, drawn once and tinted by the row it sits in. */
@@ -50,7 +56,7 @@ export function ContactLocations() {
               Where we operate
             </h2>
             <p className="text-[15px] leading-6 text-[#6b667e]">
-              We partner with brands across four hubs. Select a location to explore where our teams
+              We partner with brands from two hubs. Select a location to explore where our teams
               work from.
             </p>
 
