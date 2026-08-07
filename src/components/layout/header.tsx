@@ -3,18 +3,32 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/lib/site";
 
+/* Routes whose hero is a light surface: the header inverts to the dark
+   wordmark and ink nav so it stays legible (Figma "About us", node 455:1520). */
+const LIGHT_HEADER_ROUTES = ["/about"];
+
 export function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname() ?? "/";
+  const onLight = LIGHT_HEADER_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
+    <header
+      className={`absolute inset-x-0 top-0 z-50 ${onLight ? "border-b border-line-subtle" : ""}`}
+    >
       <Container className="flex items-center justify-between py-5 lg:py-6">
         <Link href="/" aria-label="Funnel North — home" className="shrink-0">
           <Image
-            src="/images/logo.png"
+            src={onLight ? "/images/logo-dark.png" : "/images/logo.png"}
             alt="Funnel North"
             width={109}
             height={46}
@@ -24,17 +38,27 @@ export function Header() {
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-4 md:flex">
-          {siteConfig.nav.map((item, i) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`p-2.5 transition-colors hover:text-white ${
-                i === 0 ? "font-semibold text-white" : "font-medium text-[#d9d9d9]"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {siteConfig.nav.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`p-2.5 transition-colors ${
+                  onLight
+                    ? active
+                      ? "font-semibold text-black"
+                      : "font-medium text-[#717171] hover:text-black"
+                    : active
+                      ? "font-semibold text-white"
+                      : "font-medium text-[#d9d9d9] hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <Link
@@ -46,7 +70,9 @@ export function Header() {
 
         <button
           type="button"
-          className="flex size-12 items-center justify-center text-white md:hidden"
+          className={`flex size-12 items-center justify-center md:hidden ${
+            onLight ? "text-ink" : "text-white"
+          }`}
           aria-expanded={open}
           aria-label="Toggle navigation"
           onClick={() => setOpen((v) => !v)}
@@ -62,13 +88,16 @@ export function Header() {
       </Container>
 
       {open && (
-        <nav aria-label="Mobile" className="bg-black/95 md:hidden">
+        <nav
+          aria-label="Mobile"
+          className={`md:hidden ${onLight ? "bg-white/95 text-ink" : "bg-black/95 text-white"}`}
+        >
           <Container className="flex flex-col gap-1 py-4">
             {[...siteConfig.nav, siteConfig.cta].map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="py-3 text-lg text-white"
+                className="py-3 text-lg"
                 onClick={() => setOpen(false)}
               >
                 {item.label}

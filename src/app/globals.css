@@ -18,7 +18,13 @@
   --color-muted: #7d798c;
   --color-surface: #ffffff;
   --color-surface-tint: #f1edff;
+  --color-mist: #f3eeff;
   --color-line: #d0cfd8;
+  --color-line-subtle: #e7e7ec;
+
+  /* Color — soft card tints (About page process grid) */
+  --color-lime-soft: #f3ff8b;
+  --color-purple-soft: #dccaff;
 
   /* Color — overlays on dark/brand surfaces */
   --color-overlay-white-60: rgba(255, 255, 255, 0.6);
