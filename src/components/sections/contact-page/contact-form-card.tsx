@@ -16,12 +16,17 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 /**
- * The white form card, pulled up so it crops the wordmark above as designed
+ * The white form card, pulled up so it overlaps the wordmark above as designed
  * (the card's top sits at y=389 against the text box's 464.6).
+ *
+ * The section itself stays transparent on purpose: only the 994px card should
+ * cover the type, so the ends of "SAY HELLO!" that extend past the card stay
+ * fully visible. A background on the section would clip the wordmark across
+ * the whole width instead.
  */
 export function ContactFormCard() {
   return (
-    <section className="relative z-10 -mt-[clamp(24px,5.25vw,76px)] bg-white">
+    <section className="relative z-10 -mt-[clamp(24px,5.25vw,76px)]">
       <Container>
         <Reveal className="mx-auto max-w-[994px] rounded-3xl border border-[#e8e4f4] bg-white p-7 shadow-[0_4px_60px_rgba(0,0,0,0.1)] sm:p-10 lg:p-16">
           <div className="flex flex-col gap-4">
