@@ -23,8 +23,11 @@ const principles = [
 
 /** Where the first panel pins — clear of the fixed header. */
 const STACK_TOP = 132;
-/** Extra offset per panel, i.e. how much of each one stays peeking out. */
-const STACK_STEP = 22;
+/** Extra offset per panel, i.e. how much of each one stays peeking out. The
+    panel is 132px with its number and title centred, so the copy starts ~28px
+    down — keeping the peek under that leaves a clean empty sliver rather than
+    a sliced-off line of type. */
+const STACK_STEP = 24;
 
 /**
  * "Principles over promises" — four editorial panels on black. Each panel rests
