@@ -18,7 +18,13 @@
   --color-muted: #7d798c;
   --color-surface: #ffffff;
   --color-surface-tint: #f1edff;
+  --color-mist: #f3eeff;
   --color-line: #d0cfd8;
+  --color-line-subtle: #e7e7ec;
+
+  /* Color — soft card tints (About page process grid) */
+  --color-lime-soft: #f3ff8b;
+  --color-purple-soft: #dccaff;
 
   /* Color — overlays on dark/brand surfaces */
   --color-overlay-white-60: rgba(255, 255, 255, 0.6);
@@ -88,12 +94,17 @@ body {
   }
 }
 
-/* Big Anton display headings are always uppercase with tight tracking */
-.heading-display {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: -0.015em;
-  line-height: 1.05;
+/* Big Anton display headings are always uppercase with tight tracking.
+   Declared in the components layer so per-heading `leading-*` / `tracking-*`
+   utilities win — as plain unlayered CSS this rule beat them, and the exact
+   line heights written throughout the sections were silently ignored. */
+@layer components {
+  .heading-display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
 }
 
 /* Infinite ticker used by the case-studies heading row */
