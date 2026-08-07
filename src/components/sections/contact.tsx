@@ -5,18 +5,9 @@ import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SelectField } from "@/components/ui/select-field";
+import { services } from "@/lib/services";
 import { siteConfig } from "@/lib/site";
 
-const services = [
-  "Performance Marketing",
-  "Search Engine Optimization",
-  "AI Search Optimization",
-  "AI Marketing & Automation",
-  "Website Design & Development",
-  "Branding & Designing",
-  "Analytics & Tracking",
-  "Not Sure Yet",
-];
 
 const fieldClasses =
   "h-14 w-full rounded-md border border-white/16 bg-white/8 px-[18px] text-base text-white outline-none transition-colors placeholder:text-white/40 focus:border-accent";
