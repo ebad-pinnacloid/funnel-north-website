@@ -1,0 +1,23 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="900" height="760" viewBox="0 0 900 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Map / Roads" clip-path="url(#clip0_0_75)">
+<path id="Vector" d="M-20 180C200 140 420 240 920 190" stroke="white" stroke-width="14"/>
+<path id="Vector_2" d="M-20 420C260 380 520 470 920 400" stroke="white" stroke-width="18"/>
+<path id="Vector_3" d="M180 -20C220 240 160 520 240 780" stroke="white" stroke-width="12"/>
+<path id="Vector_4" d="M520 -20C480 220 560 540 500 780" stroke="white" stroke-width="14"/>
+<path id="Vector_5" d="M720 -20C700 260 760 500 700 780" stroke="white" stroke-width="10"/>
+<path id="Vector_6" d="M-20 600C300 560 600 640 920 580" stroke="white" stroke-width="10"/>
+<path id="Vector_7" d="M-20 300C300 330 620 260 920 320" stroke="#E5DDF8" stroke-width="6"/>
+<path id="Vector_8" d="M340 -20C360 200 320 500 380 780" stroke="#E5DDF8" stroke-width="6"/>
+<path id="Vector_9" d="M-20 700C240 660 700 730 920 680" stroke="#DCD1F6" stroke-opacity="0.6" stroke-width="26"/>
+<path id="Vector_10" d="M302 210H238C233.582 210 230 213.582 230 218V262C230 266.418 233.582 270 238 270H302C306.418 270 310 266.418 310 262V218C310 213.582 306.418 210 302 210Z" fill="white" fill-opacity="0.7"/>
+<path id="Vector_11" d="M662 230H568C563.582 230 560 233.582 560 238V292C560 296.418 563.582 300 568 300H662C666.418 300 670 296.418 670 292V238C670 233.582 666.418 230 662 230Z" fill="white" fill-opacity="0.6"/>
+<path id="Vector_12" d="M462 450H388C383.582 450 380 453.582 380 458V522C380 526.418 383.582 530 388 530H462C466.418 530 470 526.418 470 522V458C470 453.582 466.418 450 462 450Z" fill="white" fill-opacity="0.7"/>
+<path id="Vector_13" d="M662 440H608C603.582 440 600 443.582 600 448V492C600 496.418 603.582 500 608 500H662C666.418 500 670 496.418 670 492V448C670 443.582 666.418 440 662 440Z" fill="#E9E2FA" fill-opacity="0.9"/>
+<path id="Vector_14" d="M302 480H248C243.582 480 240 483.582 240 488V522C240 526.418 243.582 530 248 530H302C306.418 530 310 526.418 310 522V488C310 483.582 306.418 480 302 480Z" fill="#E9E2FA" fill-opacity="0.9"/>
+</g>
+<defs>
+<clipPath id="clip0_0_75">
+<rect width="900" height="760" fill="white"/>
+</clipPath>
+</defs>
+</svg>

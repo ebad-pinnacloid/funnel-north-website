@@ -2,23 +2,56 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
+/* The design ships the dropdown in two surfaces: dark for the contact fold-out
+   on dark cards, light for the /contact form card on white (Figma
+   "Form / Services Dropdown" and its /Light twin). Only the colours differ. */
+const tones = {
+  dark: {
+    trigger: "border-white/16 bg-white/8 hover:border-white/40",
+    triggerOpen: "border-accent bg-white/8 shadow-[0_0_5px_rgba(231,254,37,0.12)]",
+    focus: "focus:border-accent focus:shadow-[0_0_5px_rgba(231,254,37,0.12)]",
+    valueText: "text-white",
+    placeholderText: "text-white/40",
+    chevron: "white",
+    menu: "border-white/16 bg-[#171717]",
+    option: "text-white",
+    optionDivider: "after:bg-white/8",
+    optionActive: "bg-brand-800",
+  },
+  light: {
+    trigger: "border-line bg-white hover:border-brand/50",
+    triggerOpen: "border-brand bg-white shadow-[0_0_5px_rgba(123,61,242,0.12)]",
+    focus: "focus:border-brand focus:shadow-[0_0_5px_rgba(123,61,242,0.12)]",
+    valueText: "text-ink",
+    placeholderText: "text-[#5f5b70]",
+    chevron: "#0f092b",
+    menu: "border-line bg-white",
+    option: "text-ink",
+    optionDivider: "after:bg-black/8",
+    optionActive: "bg-surface-tint",
+  },
+};
+
 /**
  * Custom select styled to the Figma "Form / Services Dropdown" component —
- * a native <select> can't render the dark menu panel, purple hover rows, or
- * lime selected check. Follows the APG select-only combobox pattern: focus
- * stays on the trigger, aria-activedescendant tracks the highlighted option.
+ * a native <select> can't render the menu panel, purple hover rows, or lime
+ * selected check. Follows the APG select-only combobox pattern: focus stays on
+ * the trigger, aria-activedescendant tracks the highlighted option.
  */
 export function SelectField({
   name,
   options,
   placeholder,
   required,
+  tone = "dark",
 }: {
   name: string;
   options: readonly string[];
   placeholder: string;
   required?: boolean;
+  tone?: keyof typeof tones;
 }) {
+  const t = tones[tone];
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [active, setActive] = useState(0);
@@ -94,11 +127,9 @@ export function SelectField({
         aria-activedescendant={open ? `${id}-option-${active}` : undefined}
         onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={onKeyDown}
-        className={`flex h-14 w-full cursor-pointer items-center justify-between gap-3 rounded-md border bg-white/8 px-[18px] text-left text-base outline-none transition-colors ${
-          open
-            ? "border-accent shadow-[0_0_5px_rgba(231,254,37,0.12)]"
-            : "border-white/16 hover:border-white/40 focus:border-accent focus:shadow-[0_0_5px_rgba(231,254,37,0.12)]"
-        } ${value ? "text-white" : "text-white/40"}`}
+        className={`flex h-14 w-full cursor-pointer items-center justify-between gap-3 rounded-md border px-[18px] text-left text-base outline-none transition-colors ${
+          open ? t.triggerOpen : `${t.trigger} ${t.focus}`
+        } ${value ? t.valueText : t.placeholderText}`}
       >
         {value || placeholder}
         <svg
@@ -106,7 +137,7 @@ export function SelectField({
           aria-hidden
           className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
         >
-          <path d="M3 6L8 11L13 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <path d="M3 6L8 11L13 6" stroke={t.chevron} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
       </button>
       <ul
@@ -114,7 +145,7 @@ export function SelectField({
         id={`${id}-listbox`}
         role="listbox"
         aria-label={placeholder}
-        className={`absolute inset-x-0 top-[calc(100%+8px)] z-20 max-h-[400px] overflow-y-auto rounded-md border border-white/16 bg-[#171717] py-2 shadow-[0_12px_28px_rgba(0,0,0,0.28)] animate-dropdown-in ${open ? "" : "hidden"}`}
+        className={`absolute inset-x-0 top-[calc(100%+8px)] z-20 max-h-[400px] overflow-y-auto rounded-md border py-2 shadow-[0_12px_28px_rgba(0,0,0,0.28)] animate-dropdown-in ${t.menu} ${open ? "" : "hidden"}`}
       >
         {options.map((option, index) => (
           <li
@@ -124,11 +155,11 @@ export function SelectField({
             aria-selected={option === value}
             onMouseEnter={() => setActive(index)}
             onClick={() => selectOption(option)}
-            className={`relative flex h-12 cursor-pointer items-center justify-between px-[18px] text-[15px] text-white after:absolute after:inset-x-[18px] after:bottom-0 after:h-px after:bg-white/8 last:after:hidden ${
+            className={`relative flex h-12 cursor-pointer items-center justify-between px-[18px] text-[15px] after:absolute after:inset-x-[18px] after:bottom-0 after:h-px last:after:hidden ${t.option} ${t.optionDivider} ${
               option === value
-                ? "bg-brand font-medium"
+                ? "bg-brand font-medium text-white"
                 : index === active
-                  ? "bg-brand-800"
+                  ? t.optionActive
                   : ""
             }`}
           >
