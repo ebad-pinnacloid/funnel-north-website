@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CaseStudyOverlay } from "@/components/ui/case-study-overlay";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { PillButton } from "@/components/ui/pill-button";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const caseStudies = [
   {
@@ -53,22 +54,6 @@ const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
    rects are in zoomed pixels, so transform values must be divided back. */
 const getPageZoom = () =>
   Number(getComputedStyle(document.documentElement).zoom) || 1;
-
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-function subscribeToReducedMotion(callback: () => void) {
-  const mq = window.matchMedia(REDUCED_MOTION_QUERY);
-  mq.addEventListener("change", callback);
-  return () => mq.removeEventListener("change", callback);
-}
-
-function useReducedMotion() {
-  return useSyncExternalStore(
-    subscribeToReducedMotion,
-    () => window.matchMedia(REDUCED_MOTION_QUERY).matches,
-    () => false,
-  );
-}
 
 function MarqueeItem({ text }: { text: string }) {
   return (

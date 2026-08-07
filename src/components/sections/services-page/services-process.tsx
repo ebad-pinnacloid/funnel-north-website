@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/ui/reveal";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const stages = [
   {
@@ -61,30 +62,35 @@ const nodes = [
 
 const RING_RADIUS = 445.05;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+/** Viewports of scroll the diagram is pinned for while the ring draws. */
+const SCRUB_VIEWPORTS = 2;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 /**
  * "How we process our work" — the radial process diagram.
  *
  * Figma ships this as five variants (0/25/50/75/100) and notes they map to
- * scroll progress, with reduced motion resting on 100. So the ring is drawn
- * with a dash offset that scrubs as the section crosses the viewport, each
- * stage card fades in as the sweep reaches it, and the compass nodes light in
- * turn. The whole field is one inline SVG — every layer in the design is a
- * plain circle or dashed diagonal, so assets would only add weight.
+ * scroll progress, with reduced motion resting on 100. The diagram is pinned
+ * for two viewports and the scrub runs across that pin — so the sweep begins
+ * once the reader has actually arrived on the section rather than while it is
+ * still climbing into view. The ring is drawn with a dash offset, each stage
+ * card fades in as the sweep reaches it, and the compass nodes light in turn.
+ * The whole field is one inline SVG — every layer in the design is a plain
+ * circle or dashed diagonal, so assets would only add weight.
  *
  * Below `lg` the radial layout would shrink the 16px card titles into
  * illegibility, so small screens get the same four stages as a plain list.
  */
 export function ServicesProcess() {
-  const fieldRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<SVGCircleElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const nodeRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const field = fieldRef.current;
-    if (!field) return;
+    const stage = stageRef.current;
+    if (!stage) return;
 
     const settle = (p: number) => {
       if (ringRef.current) {
@@ -102,8 +108,8 @@ export function ServicesProcess() {
       });
     };
 
-    // Reduced motion rests on the design's Progress=100 state.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // Reduced motion rests on the design's Progress=100 state, with no pin.
+    if (reducedMotion) {
       settle(1);
       return;
     }
@@ -111,8 +117,10 @@ export function ServicesProcess() {
     let raf = 0;
     const update = () => {
       raf = 0;
-      const rect = field.getBoundingClientRect();
-      settle(clamp01((window.innerHeight * 0.8 - rect.top) / (rect.height * 0.85)));
+      // Progress through the pin: 0 as the stage reaches the top of the
+      // viewport, 1 once it has been scrolled through.
+      const rect = stage.getBoundingClientRect();
+      settle(clamp01(-rect.top / (rect.height - window.innerHeight)));
     };
     const schedule = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -125,7 +133,7 @@ export function ServicesProcess() {
       window.removeEventListener("resize", schedule);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section className="bg-black py-16 lg:py-24">
@@ -142,10 +150,27 @@ export function ServicesProcess() {
           </h2>
         </Reveal>
 
-        {/* Radial diagram — desktop */}
+        {/* Radial diagram — desktop. The stage is taller than the viewport and
+            the diagram sticks inside it, so the ring draws while the reader is
+            held on the section instead of on the way in. */}
         <div
-          ref={fieldRef}
-          className="@container relative mx-auto mt-10 hidden aspect-square w-full max-w-[1000px] lg:block"
+          ref={stageRef}
+          className="hidden w-full lg:block"
+          style={
+            reducedMotion
+              ? undefined
+              : { height: `calc(${(SCRUB_VIEWPORTS + 1) * 100}svh / var(--page-zoom))` }
+          }
+        >
+          <div
+            className={
+              reducedMotion
+                ? "mt-10"
+                : "sticky top-0 flex h-screen-z items-center justify-center"
+            }
+          >
+        <div
+          className="@container relative mx-auto aspect-square w-full max-w-[min(1000px,82svh)]"
         >
           {/* Olive glow behind the field */}
           <div
@@ -262,6 +287,8 @@ export function ServicesProcess() {
               </ul>
             </div>
           ))}
+          </div>
+          </div>
         </div>
 
         {/* Stacked stages — small screens, where the radial type would be unreadable */}
