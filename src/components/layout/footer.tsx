@@ -34,6 +34,8 @@ export function Footer() {
                 <li key={social.label}>
                   <a
                     href={social.href}
+                    target="_blank"
+                    rel="noreferrer"
                     className="flex h-10 items-center rounded-pill border border-white/15 px-4 text-sm text-accent transition-colors hover:border-accent"
                   >
                     {social.label}

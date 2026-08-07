@@ -9,6 +9,7 @@
   /* Color — brand */
   --color-brand: #7b3df2;
   --color-brand-deep: #6227d4;
+  --color-brand-800: #4f22ac;
   --color-accent: #e7fe25;
 
   /* Color — neutrals & text */
@@ -155,6 +156,18 @@ body {
   animation: float 7s ease-in-out infinite alternate;
 }
 
+/* Contact form dropdown menu opening */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.animate-dropdown-in {
+  animation: dropdown-in 0.16s ease-out both;
+}
+
 /* While the preloader curtain is up, hold entrance animations at frame 0 so
    they play as the page is revealed (the Preloader removes this class). */
 html.preloading .animate-rise,
@@ -229,7 +242,8 @@ html.preloading .animate-hero-visual {
   .animate-marquee,
   .animate-rise,
   .animate-hero-visual,
-  .animate-float {
+  .animate-float,
+  .animate-dropdown-in {
     animation: none;
   }
 

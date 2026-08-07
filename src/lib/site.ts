@@ -14,9 +14,9 @@ export const siteConfig = {
     phone: "+1 2345 67891",
   },
   socials: [
-    { label: "LinkedIn", href: "#" },
-    { label: "Instagram", href: "#" },
-    { label: "Behance", href: "#" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/funnel-north/" },
+    { label: "Facebook", href: "https://www.facebook.com/FunnelNorth/" },
+    { label: "Instagram", href: "https://www.instagram.com/funnelnorth/" },
   ],
   nav: [
     { label: "Home", href: "/" },

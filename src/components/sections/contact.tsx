@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
+import { SelectField } from "@/components/ui/select-field";
 import { siteConfig } from "@/lib/site";
 
 const services = [
@@ -14,6 +15,7 @@ const services = [
   "Website Design & Development",
   "Branding & Designing",
   "Analytics & Tracking",
+  "Not Sure Yet",
 ];
 
 const fieldClasses =
@@ -160,30 +162,12 @@ export function Contact() {
           </Reveal>
           <Reveal delay={0.2}>
           <Field label="Services">
-            <span className="relative">
-              <select
-                name="service"
-                required
-                defaultValue=""
-                className={`${fieldClasses} cursor-pointer appearance-none pr-10 [&:invalid]:text-white/40`}
-              >
-                <option value="" disabled>
-                  Select a service
-                </option>
-                {services.map((service) => (
-                  <option key={service} value={service} className="text-black">
-                    {service}
-                  </option>
-                ))}
-              </select>
-              <svg
-                viewBox="0 0 16 16"
-                aria-hidden
-                className="pointer-events-none absolute right-[18px] top-1/2 size-4 -translate-y-1/2"
-              >
-                <path d="M3 6L8 11L13 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              </svg>
-            </span>
+            <SelectField
+              name="service"
+              options={services}
+              placeholder="Select a service"
+              required
+            />
           </Field>
           </Reveal>
           <Reveal delay={0.25}>
