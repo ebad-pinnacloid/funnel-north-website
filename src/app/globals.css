@@ -257,6 +257,82 @@ html.preloading .animate-hero-visual {
   }
 }
 
+/* Process deck: desktop-only pinned scroll story for "How we build success".
+   The heading holds at the top of the pin while the six step cards rise from
+   below, one per scroll step, into three slots — card 4 lands on card 1, card
+   5 on card 2, and so on. <AboutProcess/>'s rAF handler writes the transforms
+   and adds `is-live`; every rule below is gated on that class so a no-JS (or
+   reduced-motion) visitor keeps the plain three-column grid instead of a stack
+   of cards parked off-screen forever. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  .process-stage.is-live {
+    /* --process-steps is set inline from the card count. */
+    height: calc(var(--process-steps) * 100svh / var(--page-zoom));
+  }
+
+  .process-stage.is-live .process-pin {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: calc(100svh / var(--page-zoom));
+    flex-direction: column;
+    /* Top padding clears the fixed header so the held heading never tucks
+       under it; the rest of the screen belongs to the deck. */
+    padding-block: clamp(72px, calc(9svh / var(--page-zoom)), 116px)
+      clamp(32px, calc(5svh / var(--page-zoom)), 72px);
+    overflow: hidden;
+  }
+
+  /* The <Container> between the pin and the deck: stretch it so the deck can
+     claim every pixel the heading doesn't use. */
+  .process-stage.is-live .process-pin > * {
+    display: flex;
+    width: 100%;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  /* Every card shares row 1, so the three slots overlap by design and a later
+     card simply covers the one three steps before it. */
+  .process-stage.is-live .process-deck {
+    position: relative;
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: min(447.75px, 100%);
+    align-content: center;
+    gap: 18.75px;
+  }
+
+  .process-stage.is-live .process-card {
+    grid-row: 1;
+    /* Parked below the fold until the handler's first frame, so the cards
+       never flash stacked on top of each other during hydration. */
+    transform: translateY(110svh);
+    will-change: transform;
+  }
+
+  .process-stage.is-live .process-card[data-slot="0"] {
+    grid-column: 1;
+  }
+
+  .process-stage.is-live .process-card[data-slot="1"] {
+    grid-column: 2;
+  }
+
+  .process-stage.is-live .process-card[data-slot="2"] {
+    grid-column: 3;
+  }
+
+  /* Bottom-anchoring the copy keeps it safe on short viewports, where the
+     designed 200px top padding would push the body text out of the card. */
+  .process-stage.is-live .process-card > * {
+    height: 100%;
+    justify-content: flex-end;
+    padding-top: 40px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-rise,
